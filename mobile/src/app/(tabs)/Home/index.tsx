@@ -1,169 +1,161 @@
-import AnalyticsHeader, {
-  AnalyticsHeaderHandle,
-  SWIPE_THRESHOLD,
-  HANDLE_VISIBLE_HEIGHT,
-} from '@/components/AnalyticsHeader';
-import MonthlyTable, { MonthlyTableHandle } from '@/components/MonthlyTable';
-import CalendarGrid from '@/components/CalendarGrid';
-import CalendarSwipe from '@/components/CalendarSwipe';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, PanResponder, Animated, TouchableOpacity } from 'react-native';
-import { styles } from './styles';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ListRenderItemInfo,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/Feather';
 import { StatusBar } from 'expo-status-bar';
-import { fetchRegistros, Registro } from '@/app/registros';
-import { inscreverExibicaoCabecalhoHome } from '@/utils/homeHeaderEvents';
-import { HOME_REFRESH_INTERVAL_MS } from '@/constants/refresh';
+import { styles } from './styles';
 
-let cacheRegistros: Registro[] = [];
-let ultimoUpdate = 0;
+interface CarouselItem {
+  id: string;
+  title: string;
+  image: string;
+}
 
-export default function TelaInicialFinanceiro() {
-  const referenciaDoHeader = useRef<AnalyticsHeaderHandle>(null);
-  const referenciaDaTabela = useRef<MonthlyTableHandle>(null);
-  const movimentoVerticalDoHeader = useRef(new Animated.Value(0)).current;
-  const alturaDoHeader = useRef(new Animated.Value(0)).current;
-  const [listaDeRegistros, setListaDeRegistros] = useState<Registro[]>(cacheRegistros);
-  const [headerEstaVisivel, setHeaderEstaVisivel] = useState(true);
-  const [modoDeVisualizacao, setModoDeVisualizacao] = useState<'grid' | 'swipe' | 'table'>('table');
+interface Product {
+  id: string;
+  name: string;
+  price: string;
+  image: string;
+  aspectRatio: number;
+}
 
-  const atualizarListaDeRegistros = useCallback(() => {
-    fetchRegistros()
-      .then(dados => {
-        cacheRegistros = dados;
-        ultimoUpdate = Date.now();
-        setListaDeRegistros(dados);
-      })
-      .catch(erro => console.error(erro));
+const highlights: CarouselItem[] = Array.from({ length: 5 }).map((_, i) => ({
+  id: `d${i}`,
+  title: `Destaque ${i + 1}`,
+  image: `https://picsum.photos/seed/highlight${i}/300/200`,
+}));
+
+const promotions: CarouselItem[] = Array.from({ length: 5 }).map((_, i) => ({
+  id: `p${i}`,
+  title: `Promoção ${i + 1}`,
+  image: `https://picsum.photos/seed/promo${i}/300/200`,
+}));
+
+function generateProducts(count: number): Product[] {
+  return Array.from({ length: count }).map((_, i) => {
+    const id = Math.random().toString(36).slice(2);
+    const aspect = Math.random() > 0.5 ? 1 : 3 / 4;
+    return {
+      id,
+      name: `Produto ${i + 1}`,
+      price: `R$ ${(Math.random() * 100).toFixed(2)}`,
+      image: `https://picsum.photos/seed/${id}/400/400`,
+      aspectRatio: aspect,
+    };
+  });
+}
+
+export default function HomeScreen() {
+  const [location, setLocation] = useState('Obtendo localização...');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setLocation('Localização indisponível');
+          return;
+        }
+        const loc = await Location.getCurrentPositionAsync({});
+        const [rev] = await Location.reverseGeocodeAsync(loc.coords);
+        if (rev?.city) {
+          setLocation(`${rev.city}${rev.subregion ? '/' + rev.subregion : ''}`);
+        } else {
+          setLocation('Localização desconhecida');
+        }
+      } catch {
+        setLocation('Localização indisponível');
+      }
+    })();
+    loadMore();
   }, []);
 
-  const aoAdicionarNovoRegistro = useCallback(
-    (data: Date) => {
-      atualizarListaDeRegistros();
-      referenciaDoHeader.current?.hide();
-      referenciaDaTabela.current?.scrollToMonth(data.getMonth());
-    },
-    [atualizarListaDeRegistros],
+  const loadMore = useCallback(() => {
+    if (loading) return;
+    setLoading(true);
+    setTimeout(() => {
+      setProducts(p => [...p, ...generateProducts(10)]);
+      setLoading(false);
+    }, 300);
+  }, [loading]);
+
+  const renderCarouselItem = ({ item }: ListRenderItemInfo<CarouselItem>) => (
+    <View style={styles.carouselCard}>
+      <Image source={{ uri: item.image }} style={styles.carouselImage} />
+      <Text style={styles.carouselTitle}>{item.title}</Text>
+    </View>
   );
 
-  useEffect(() => {
-    let ativo = true;
+  const renderProduct = ({ item }: ListRenderItemInfo<Product>) => (
+    <View style={[styles.productCard, { aspectRatio: item.aspectRatio }]}>
+      <Image source={{ uri: item.image }} style={styles.productImage} />
+      <View style={styles.productInfo}>
+        <Text style={styles.productName}>{item.name}</Text>
+        <Text style={styles.productPrice}>{item.price}</Text>
+      </View>
+    </View>
+  );
 
-    const atualizar = () => {
-      fetchRegistros()
-        .then(dados => {
-          cacheRegistros = dados;
-          ultimoUpdate = Date.now();
-          if (ativo) setListaDeRegistros(dados);
-        })
-        .catch(erro => console.error(erro));
-    };
-
-    if (cacheRegistros.length > 0) {
-      setListaDeRegistros(cacheRegistros);
-      if (Date.now() - ultimoUpdate > HOME_REFRESH_INTERVAL_MS) {
-        atualizar();
-      }
-    } else {
-      atualizar();
-    }
-
-    const id = setInterval(atualizar, HOME_REFRESH_INTERVAL_MS);
-    return () => {
-      ativo = false;
-      clearInterval(id);
-    };
-  }, []);
-
-  useEffect(() => {
-    const cancelarInscricao = inscreverExibicaoCabecalhoHome(() => {
-      referenciaDoHeader.current?.show();
-    });
-    return () => {
-      cancelarInscricao();
-    };
-  }, []);
-
-  const controladorDeGestos = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, estadoDoGesto) =>
-        Math.abs(estadoDoGesto.dy) > 20,
-      onPanResponderRelease: (_, estadoDoGesto) => {
-        if (estadoDoGesto.dy > SWIPE_THRESHOLD) {
-          referenciaDoHeader.current?.show();
-        } else if (estadoDoGesto.dy < -SWIPE_THRESHOLD) {
-          referenciaDoHeader.current?.hide();
-        }
-      },
-    }),
-  ).current;
-
-  const alternarModoDeVisualizacao = useCallback(() => {
-    setModoDeVisualizacao(modoAtual => {
-      if (modoAtual === 'table') return 'swipe';
-      if (modoAtual === 'swipe') return 'grid';
-      return 'table';
-    });
-  }, []);
-
-  const aoMudarAlturaDoHeader = useCallback(
-    (altura: number) => {
-      alturaDoHeader.setValue(altura);
-    },
-    [alturaDoHeader],
+  const header = (
+    <View>
+      <FlatList
+        data={highlights}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderCarouselItem}
+        keyExtractor={i => i.id}
+        style={styles.carousel}
+      />
+      <Text style={styles.promoTitle}>Promoções dos produtos que você viu ultimamente</Text>
+      <FlatList
+        data={promotions}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderCarouselItem}
+        keyExtractor={i => i.id}
+        style={styles.carousel}
+      />
+    </View>
   );
 
   return (
-    <View style={styles.containerTela} {...controladorDeGestos.panHandlers}>
-      <StatusBar hidden={!headerEstaVisivel} />
-      <AnalyticsHeader
-        ref={referenciaDoHeader}
-        translateY={movimentoVerticalDoHeader}
-        onHeight={aoMudarAlturaDoHeader}
-        onAdd={aoAdicionarNovoRegistro}
-        onVisibleChange={setHeaderEstaVisivel}
-      />
-      <Animated.View
-        style={[
-          styles.areaConteudo,
-          {
-            transform: [
-              {
-                translateY: Animated.add(
-                  movimentoVerticalDoHeader,
-                  Animated.subtract(alturaDoHeader, HANDLE_VISIBLE_HEIGHT),
-                ),
-              },
-            ],
-          },
-        ]}
-      >
-        <TouchableOpacity style={styles.botaoAlternarVisao} onPress={alternarModoDeVisualizacao}>
-          <Icon
-            name={
-              modoDeVisualizacao === 'table'
-                ? 'calendar'
-                : modoDeVisualizacao === 'swipe'
-                  ? 'grid'
-                  : 'refresh-cw'
-            }
-            size={20}
-            color="#fff"
-          />
+    <View style={styles.containerTela}>
+      <StatusBar style="light" />
+      <View style={styles.searchBar}>
+        <TouchableOpacity>
+          <Icon name="map-pin" size={20} color="#fff" />
         </TouchableOpacity>
-        {modoDeVisualizacao === 'swipe' ? (
-          <CalendarSwipe registros={listaDeRegistros} />
-        ) : modoDeVisualizacao === 'grid' ? (
-          <CalendarGrid registros={listaDeRegistros} />
-        ) : (
-          <MonthlyTable
-            ref={referenciaDaTabela}
-            registros={listaDeRegistros}
-            onUpdated={atualizarListaDeRegistros}
-          />
-        )}
-      </Animated.View>
+        <Text style={styles.locationText}>{location}</Text>
+        <TextInput
+          placeholder="Buscar produtos"
+          placeholderTextColor="#999"
+          style={styles.searchInput}
+        />
+      </View>
+      <FlatList
+        contentContainerStyle={styles.listContent}
+        data={products}
+        numColumns={2}
+        columnWrapperStyle={styles.column}
+        renderItem={renderProduct}
+        keyExtractor={i => i.id}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.2}
+        ListFooterComponent={loading ? <ActivityIndicator size="small" color="#fff" style={{ margin: 16 }} /> : null}
+        ListHeaderComponent={header}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
-
