@@ -1,13 +1,12 @@
 import { Slot } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
-// import Menu from '@/components/Menu'; // Menu temporariamente oculto
+import Menu from '@/components/Menu';
 
 export default function TabsLayout() {
   return (
     <View style={styles.container}>
       <Slot />
-      {/* Menu temporariamente oculto */}
-      {/* <Menu /> */}
+      <Menu />
     </View>
   );
 }

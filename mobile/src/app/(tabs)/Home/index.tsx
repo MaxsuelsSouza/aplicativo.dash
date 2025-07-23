@@ -12,13 +12,10 @@ import {
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/Feather';
 import { StatusBar } from 'expo-status-bar';
+import CarouselSection from '../../../components/CarouselSection';
+import CircularCarousel from '../../../components/CircularCarousel';
+import { CarouselItem } from '../../../components/CarouselSection/types';
 import { styles } from './styles';
-
-interface CarouselItem {
-  id: string;
-  title: string;
-  image: string;
-}
 
 interface Product {
   id: string;
@@ -40,6 +37,12 @@ const promotions: CarouselItem[] = Array.from({ length: 5 }).map((_, i) => ({
   image: `https://picsum.photos/seed/promo${i}/300/200`,
 }));
 
+const nearbyPromotions: CarouselItem[] = Array.from({ length: 6 }).map((_, i) => ({
+  id: `np${i}`,
+  title: `Oferta ${i + 1}`,
+  image: `https://picsum.photos/seed/nearby${i}/300/300`,
+}));
+
 function generateProducts(count: number): Product[] {
   return Array.from({ length: count }).map((_, i) => {
     const id = Math.random().toString(36).slice(2);
@@ -58,6 +61,15 @@ export default function HomeScreen() {
   const [location, setLocation] = useState('Obtendo localização...');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const loadMore = useCallback(() => {
+    if (loading) return;
+    setLoading(true);
+    setTimeout(() => {
+      setProducts(p => [...p, ...generateProducts(10)]);
+      setLoading(false);
+    }, 300);
+  }, [loading]);
 
   useEffect(() => {
     (async () => {
@@ -79,69 +91,54 @@ export default function HomeScreen() {
       }
     })();
     loadMore();
-  }, []);
-
-  const loadMore = useCallback(() => {
-    if (loading) return;
-    setLoading(true);
-    setTimeout(() => {
-      setProducts(p => [...p, ...generateProducts(10)]);
-      setLoading(false);
-    }, 300);
-  }, [loading]);
-
-  const renderCarouselItem = ({ item }: ListRenderItemInfo<CarouselItem>) => (
-    <View style={styles.carouselCard}>
-      <Image source={{ uri: item.image }} style={styles.carouselImage} />
-      <Text style={styles.carouselTitle}>{item.title}</Text>
-    </View>
-  );
+  }, [loadMore]);
 
   const renderProduct = ({ item }: ListRenderItemInfo<Product>) => (
     <View style={[styles.productCard, { aspectRatio: item.aspectRatio }]}>
       <Image source={{ uri: item.image }} style={styles.productImage} />
-      <View style={styles.productInfo}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>{item.price}</Text>
-      </View>
     </View>
   );
 
   const header = (
     <View>
-      <FlatList
-        data={highlights}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={renderCarouselItem}
-        keyExtractor={i => i.id}
-        style={styles.carousel}
-      />
-      <Text style={styles.promoTitle}>Promoções dos produtos que você viu ultimamente</Text>
-      <FlatList
+      <CarouselSection
+        title="Ofertas dos itens visualizados"
         data={promotions}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={renderCarouselItem}
-        keyExtractor={i => i.id}
-        style={styles.carousel}
+        isLargeCarousel={false}
       />
+      <CircularCarousel
+        title="Promoções perto de você"
+        data={nearbyPromotions}
+      />
+      <CarouselSection
+        title="Destaque do dia"
+        data={highlights}
+        isLargeCarousel={true}
+      />
+      <Text style={styles.infiniteScrollTitle}>Talvez você nem precisasse</Text>
     </View>
-  );
-
-  return (
+  ); return (
     <View style={styles.containerTela}>
-      <StatusBar style="light" />
-      <View style={styles.searchBar}>
-        <TouchableOpacity>
-          <Icon name="map-pin" size={20} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.locationText}>{location}</Text>
-        <TextInput
-          placeholder="Buscar produtos"
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-        />
+      <StatusBar style="dark" />
+      <View style={styles.statusBarBackground} />
+      <View style={styles.headerContainer}>
+        <View style={styles.locationContainer}>
+          <TouchableOpacity>
+            <Icon name="map-pin" size={20} color="#8B4513" />
+          </TouchableOpacity>
+          <Text style={styles.locationText}>{location}</Text>
+        </View>
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Buscar produtos"
+            placeholderTextColor="#A0522D"
+            style={styles.searchInput}
+          />
+          <View style={styles.pointsContainer}>
+            <Text style={styles.pointsLabel}>🎯 Pts</Text>
+            <Text style={styles.codeText}>D015</Text>
+          </View>
+        </View>
       </View>
       <FlatList
         contentContainerStyle={styles.listContent}
@@ -152,7 +149,7 @@ export default function HomeScreen() {
         keyExtractor={i => i.id}
         onEndReached={loadMore}
         onEndReachedThreshold={0.2}
-        ListFooterComponent={loading ? <ActivityIndicator size="small" color="#fff" style={{ margin: 16 }} /> : null}
+        ListFooterComponent={loading ? <ActivityIndicator size="small" color="#FFD700" style={{ margin: 16 }} /> : null}
         ListHeaderComponent={header}
         showsVerticalScrollIndicator={false}
       />

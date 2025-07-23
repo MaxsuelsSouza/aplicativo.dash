@@ -8,11 +8,13 @@ export const ContainerMenu = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  background: #141414;
+  background: #fff;
   padding: 0 16px 24px 16px;
   height: 85px;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  border-top-width: 1px;
+  border-color: #ddd8c0;
 `;
 
 export const BotaoMenu = styled.TouchableOpacity`
@@ -31,7 +33,7 @@ export const IconeMenu = styled.View`
 
 export const RotuloMenu = styled.Text<{ ativo?: boolean }>`
   font-size: 14px;
-  color: ${({ ativo }) => (ativo ? "#A287FF" : "#868686")};
+  color: ${({ ativo }) => (ativo ? "#FFD700" : "#8B4513")};
   font-family: "Inter";
   font-weight: 500;
 `;
