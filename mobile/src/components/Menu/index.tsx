@@ -11,11 +11,9 @@ import {
 import { emitirExibicaoCabecalhoHome } from '@/utils/homeHeaderEvents';
 
 const opcoesMenu = [
-  { name: 'Home', icon: 'home', path: '/Home' },
-  { name: 'Finanças', icon: 'safe', path: '/Financas' },
-  { name: 'Crédito', icon: 'cash-multiple', path: '/Credito' },
-  { name: 'Notícias', icon: 'newspaper', path: '/Noticias' },
-  { name: 'Conta', icon: 'account-circle', path: '/Conta' },
+  { name: 'Início', icon: 'home', path: '/Home' },
+  { name: 'Pedido', icon: 'receipt', path: '/Pedido' },
+  { name: 'Perfil', icon: 'account-circle', path: '/Conta' },
 ];
 
 export default function Menu() {
@@ -41,7 +39,7 @@ export default function Menu() {
               as={Icon}
               name={item.icon}
               size={28}
-              color={pathname === item.path ? '#A287FF' : '#868686'}
+              color={pathname === item.path ? '#FFD700' : '#8B4513'}
             />
             <RotuloMenu ativo={pathname === item.path}>{item.name}</RotuloMenu>
           </ItemMenu>
