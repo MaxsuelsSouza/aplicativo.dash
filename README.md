@@ -27,6 +27,12 @@ EXPO_PUBLIC_API_URL="https://meu-servidor" npx expo start
 
 Veja o exemplo em [`mobile/src/.env.example`](mobile/src/.env.example).
 
+## Camada de API
+
+As requisições para o backend são centralizadas no objeto `api`,
+definido em [`mobile/src/utils/Api.ts`](mobile/src/utils/Api.ts).
+Utilize esse objeto para realizar `GET`, `POST`, `PUT` e `DELETE`.
+
 ## Ignorando o Safe Area
 
 Se alguma tela não deve respeitar o espaçamento aplicado automaticamente pelo
