@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
-import { lojaImagem } from '@/interfaces/loja';
+import { LojaImagem } from '@/interfaces/loja';
 
-export const Container = styled(FlatList as new () => FlatList<lojaImagem>).attrs({
+export const Container = styled(FlatList as new () => FlatList<LojaImagem>).attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
 })``;

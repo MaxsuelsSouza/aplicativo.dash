@@ -1,10 +1,10 @@
 import React from 'react';
 import { Dimensions } from 'react-native';
-import { lojaImagem } from '@/interfaces/loja';
+import { LojaImagem } from '@/interfaces/loja';
 import { Container, Item, LojaImage, LojaNome } from './styles';
 
 export interface CarrosselLojasProps {
-  lojas: lojaImagem[];
+  lojas: LojaImagem[];
 }
 
 export default function CarrosselLojas({ lojas }: CarrosselLojasProps) {
