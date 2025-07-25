@@ -144,4 +144,3 @@ mobile/src/components/**/*.js
 mobile/src/constants/*.js
 mobile/src/hooks/**/*.js
 mobile/src/utils/*.js
-mobile/src/.env.example
