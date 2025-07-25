@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import HomeScreen from './index';
 import { API_URL } from '@/constants/api';
 import { lojaImagem } from '@/interfaces/loja';
-import { CarouselItem } from '../../../components/CarouselSection/types';
 
 export async function imagemLoja(): Promise<lojaImagem[]> {
   const response = await fetch(`${API_URL}/lojas`);
@@ -19,22 +18,6 @@ export async function imagemLoja(): Promise<lojaImagem[]> {
 }
 
 export default function HomePage() {
-  const [nearbyPromotions, setNearbyPromotions] = useState<CarouselItem[]>([]);
-
-  useEffect(() => {
-    imagemLoja()
-      .then(lojas =>
-        setNearbyPromotions(
-          lojas.map(loja => ({
-            id: loja.id,
-            title: loja.nomeFantasia,
-            image: loja.imagem,
-          }))
-        )
-      )
-      .catch(console.error);
-  }, []);
-
-  return <HomeScreen nearbyPromotions={nearbyPromotions} />;
+  return <HomeScreen />;
 }
 
