@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import CarouselSection from '../../../components/CarouselSection';
 import CircularCarousel from '../../../components/CircularCarousel';
 import { CarouselItem } from '../../../components/CarouselSection/types';
-import { fetchLojas } from '@/app/lojas';
+import { fetchLojas, Loja } from '@/app/lojas';
 import { styles } from './styles';
 
 interface Product {
@@ -56,7 +56,7 @@ export default function HomeScreen() {
   const [location, setLocation] = useState('Obtendo localização...');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-  const [nearbyPromotions, setNearbyPromotions] = useState<CarouselItem[]>([]);
+  const [nearbyPromotions, setNearbyPromotions] = useState<Loja[]>([]);
 
   const loadMore = useCallback(() => {
     if (loading) return;
@@ -91,15 +91,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     fetchLojas()
-      .then(lojas =>
-        setNearbyPromotions(
-          lojas.map(loja => ({
-            id: String(loja.id),
-            title: loja.nome,
-            image: loja.imagem,
-          }))
-        )
-      )
+      .then(lojas => setNearbyPromotions(lojas))
       .catch(() => {
         /* ignore errors */
       });
