@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { fetchRegistros } from '@/app/registros';
 
 export default function DashboardScreen() {
@@ -12,7 +11,6 @@ export default function DashboardScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
       <ScrollView
         contentContainerStyle={styles.content}
         refreshControl={

@@ -7,7 +7,6 @@ import {
   Pressable,
 } from 'react-native';
 import { styles } from './styles';
-import { StatusBar } from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
 import { fetchRegistros } from '@/app/registros';
@@ -32,7 +31,6 @@ export default function LojaScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
       <View style={styles.header}>
         <Text style={styles.title}>Minhas Lojas</Text>
         <Pressable onPress={novaLoja} style={styles.addButton}>
