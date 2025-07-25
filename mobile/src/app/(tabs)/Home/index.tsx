@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import CarouselSection from '../../../components/CarouselSection';
 import CircularCarousel from '../../../components/CircularCarousel';
 import { CarouselItem } from '../../../components/CarouselSection/types';
+import { imagemLoja } from './page';
 import { styles } from './styles';
 
 interface Product {
@@ -36,6 +37,14 @@ const promotions: CarouselItem[] = Array.from({ length: 5 }).map((_, i) => ({
   image: `https://picsum.photos/seed/promo${i}/300/200`,
 }));
 
+const fallbackNearbyPromotions: CarouselItem[] = Array.from({ length: 6 }).map(
+  (_, i) => ({
+    id: `np${i}`,
+    title: `Nome fantasia ${i + 1}`,
+    image: `https://picsum.photos/seed/nearby${i}/300/300`,
+  }),
+);
+
 
 function generateProducts(count: number): Product[] {
   return Array.from({ length: count }).map((_, i) => {
@@ -51,14 +60,12 @@ function generateProducts(count: number): Product[] {
   });
 }
 
-export interface HomeScreenProps {
-  nearbyPromotions: CarouselItem[];
-}
-
-export default function HomeScreen({ nearbyPromotions }: HomeScreenProps) {
+export default function HomeScreen() {
   const [location, setLocation] = useState('Obtendo localização...');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [nearbyPromotions, setNearbyPromotions] =
+    useState<CarouselItem[]>(fallbackNearbyPromotions);
 
   const loadMore = useCallback(() => {
     if (loading) return;
@@ -88,6 +95,19 @@ export default function HomeScreen({ nearbyPromotions }: HomeScreenProps) {
         setLocation('Localização indisponível');
       }
     })();
+    imagemLoja()
+      .then(lojas => {
+        setNearbyPromotions(
+          lojas.map(loja => ({
+            id: String(loja.id),
+            title: loja.nomeFantasia,
+            image: loja.imagem,
+          }))
+        );
+      })
+      .catch(() => {
+        setNearbyPromotions(fallbackNearbyPromotions);
+      });
     loadMore();
   }, [loadMore]);
 
