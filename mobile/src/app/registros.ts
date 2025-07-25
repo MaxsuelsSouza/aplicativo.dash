@@ -1,4 +1,4 @@
-import { API_URL } from "@/constants/api";
+import { api } from "@/Api/api";
 
 export interface Nota {
   id: number;
@@ -17,15 +17,12 @@ export interface Registro {
 }
 
 export async function fetchRegistros(): Promise<Registro[]> {
-  const response = await fetch(`${API_URL}/controle/registros`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch registros');
-  }
-  const data = await response.json();
+  const data = await api.get<any[]>("/controle/registros");
   return data.map((r: any) => ({
     ...r,
     id: Number(r.id),
-    id_pai: r.id_pai !== null && r.id_pai !== undefined ? Number(r.id_pai) : null,
+    id_pai:
+      r.id_pai !== null && r.id_pai !== undefined ? Number(r.id_pai) : null,
     notas: Array.isArray(r.notas)
       ? r.notas.map((n: any) => ({
           ...n,
@@ -52,7 +49,7 @@ export async function createRegistro({
   isEntry,
 }: NovoRegistroParams) {
   const normalizedDate = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
   );
   const body = {
     data: normalizedDate.toISOString(),
@@ -61,15 +58,7 @@ export async function createRegistro({
     descricao_do_gasto: description,
     is_saida: !isEntry,
   };
-  const response = await fetch(`${API_URL}/controle`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create registro');
-  }
-  return response.json();
+  return api.post("/controle", body);
 }
 
 export async function updateRegistro(
@@ -80,45 +69,19 @@ export async function updateRegistro(
   const body: any = {};
   if (isEntry) body.entrada = amount;
   else body.saida = amount;
-  const response = await fetch(`${API_URL}/controle/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to update registro');
-  }
-  return response.json();
+  return api.put(`/controle/${id}`, body);
 }
 
 export async function marcarRecorrente(id: number, meses?: number) {
   const body: any = {};
-  if (typeof meses === 'number') body.meses = meses;
-  const response = await fetch(`${API_URL}/controle/${id}/recorrente`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to marcar recorrente');
-  }
-  return response.json();
+  if (typeof meses === "number") body.meses = meses;
+  return api.post(`/controle/${id}/recorrente`, body);
 }
 
 export async function deleteRecorrente(id: number) {
-  const response = await fetch(`${API_URL}/controle/${id}/recorrente`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Failed to apagar recorrencia');
-  }
+  return api.delete(`/controle/${id}/recorrente`);
 }
 
 export async function deleteRegistro(id: number) {
-  const response = await fetch(`${API_URL}/controle/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Failed to delete registro');
-  }
+  return api.delete(`/controle/${id}`);
 }
