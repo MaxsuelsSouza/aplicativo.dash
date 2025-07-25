@@ -114,4 +114,25 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     textAlign: "left",
   },
+  carouselContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  storeItem: {
+    alignItems: "center",
+    marginRight: 16,
+  },
+  storeImage: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    marginBottom: 8,
+    backgroundColor: "#EEE",
+  },
+  storeName: {
+    maxWidth: 72,
+    textAlign: "center",
+    color: "#8B4513",
+    fontSize: 12,
+  },
 });
