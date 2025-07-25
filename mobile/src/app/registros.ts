@@ -1,5 +1,5 @@
 import { API_URL } from "@/constants/api";
-import { lojaImagem } from "@/interfaces/loja";
+import { LojaImagem } from "@/interfaces/loja";
 import { Produto } from "@/interfaces/product";
 
 export async function ProdutosDetalhado(): Promise<Produto[]> {
@@ -38,7 +38,7 @@ export async function ProdutosDetalhado(): Promise<Produto[]> {
       }));
 }
 
-export async function imagemLoja(): Promise<lojaImagem[]> {
+export async function imagemLoja(): Promise<LojaImagem[]> {
   const response = await fetch(`${API_URL}/lojas`);
   if (!response.ok) {
     throw new Error("Failed to fetch registros");
