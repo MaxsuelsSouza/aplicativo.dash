@@ -16,8 +16,8 @@ Abra o aplicativo utilizando o Expo Go ou um simulador.
 
 ## Configurando o backend
 
-Por padrão o app se conecta ao backend de produção
-`https://backendfinan-aapp-production.up.railway.app`. Caso seja necessário usar
+Por padrão o app se conecta ao backend local em
+`http://localhost:3000/api`. Caso seja necessário usar
 outro servidor, defina a variável `EXPO_PUBLIC_API_URL` (ou crie um arquivo
 `.env`) antes de iniciar o Expo:
 
