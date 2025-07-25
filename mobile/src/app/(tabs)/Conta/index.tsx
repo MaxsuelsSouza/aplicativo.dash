@@ -54,8 +54,10 @@ const styles = StyleSheet.create({
   },
   username: {
     color: '#fff',
-    fontSize: 22,
-    marginBottom: 8,
+    fontSize: 42,
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 1,
   },
   link: {
     color: '#FFD700',

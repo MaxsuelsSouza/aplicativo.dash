@@ -12,8 +12,10 @@ export default function PerfilVendedorScreen() {
     <View style={styles.container}>
       <StatusBar />
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.username}>{USERNAME}</Text>
-        <Text style={styles.text}>Perfil do vendedor</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+          <Text style={styles.username}>{USERNAME}</Text>
+          <Text style={styles.tag}>Vendedor</Text>
+        </View>
         <Pressable onPress={() => router.replace('/Home')}>
           <Text style={styles.link}>Sair do modo vendedor</Text>
         </Pressable>
@@ -33,13 +35,21 @@ const styles = StyleSheet.create({
   },
   username: {
     color: '#fff',
-    fontSize: 22,
-    marginBottom: 8,
+    fontSize: 42,
+    fontWeight: 'bold',
+    marginRight: 2,
+    marginTop: 10,
   },
-  text: {
-    color: '#fff',
-    fontSize: 18,
-    marginBottom: 32,
+  tag: {
+    backgroundColor: '#FFD700',
+    color: '#1E1F28',
+    fontSize: 13,
+    fontWeight: 'bold',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    marginLeft: 4,
+    marginTop: 10,
   },
   link: {
     color: '#FFD700',
