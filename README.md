@@ -16,10 +16,11 @@ Abra o aplicativo utilizando o Expo Go ou um simulador.
 
 ## Configurando o backend
 
-Por padrão o app se conecta ao backend local em
-`http://localhost:3000/api`. Caso seja necessário usar
-outro servidor, defina a variável `EXPO_PUBLIC_API_URL` (ou crie um arquivo
-`.env`) antes de iniciar o Expo:
+Por padrão o app se conecta ao backend local. Se nenhuma URL for definida na
+variável `EXPO_PUBLIC_API_URL`, o endereço utilizado será `http://localhost:3000/api`
+no iOS ou `http://10.0.2.2:3000/api` em emuladores Android. Para usar outro
+servidor, defina `EXPO_PUBLIC_API_URL` (ou crie um arquivo `.env`) antes de
+iniciar o Expo:
 
 ```sh
 EXPO_PUBLIC_API_URL="https://meu-servidor" npx expo start
