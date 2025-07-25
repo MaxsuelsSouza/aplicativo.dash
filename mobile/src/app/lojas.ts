@@ -4,10 +4,11 @@ export interface Loja {
   imagem: string;
 }
 
+import { API_URL } from "@/constants/api";
+
 export async function fetchLojas(): Promise<Loja[]> {
-  // Fetch stores directly from the local API.
-  // The backend is expected to run on http://localhost:3000.
-  const response = await fetch('http://localhost:3000/api/lojas');
+  // Fetch stores from the configured backend URL.
+  const response = await fetch(`${API_URL}/lojas`);
   if (!response.ok) {
     throw new Error('Failed to fetch lojas');
   }
