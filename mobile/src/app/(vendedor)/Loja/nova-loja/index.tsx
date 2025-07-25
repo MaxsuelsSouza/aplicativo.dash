@@ -1,11 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 
 export default function NovaLojaScreen() {
   return (
     <View style={styles.container}>
-      <StatusBar />
       <Text style={styles.text}>Fluxo de criação de loja</Text>
     </View>
   );

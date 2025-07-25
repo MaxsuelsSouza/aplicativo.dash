@@ -22,9 +22,9 @@ export const styles = StyleSheet.create({
     right: 0,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: "#fff", // Branco
+    // Branco
     zIndex: 10,
-    paddingTop: 50,
+    paddingTop: 35,
   },
   locationContainer: {
     flexDirection: "row",

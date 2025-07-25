@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/Feather';
-import { StatusBar } from 'expo-status-bar';
 import CarouselSection from '../../../components/CarouselSection';
 import CircularCarousel from '../../../components/CircularCarousel';
 import { CarouselItem } from '../../../components/CarouselSection/types';
@@ -119,7 +118,6 @@ export default function HomeScreen() {
     </View>
   ); return (
     <View style={styles.containerTela}>
-      <StatusBar style="dark" />
       <View style={styles.statusBarBackground} />
       <View style={styles.headerContainer}>
         <View style={styles.locationContainer}>

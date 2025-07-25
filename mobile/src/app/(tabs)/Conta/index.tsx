@@ -7,7 +7,6 @@ import {
   RefreshControl,
   Pressable,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 import { fetchRegistros } from '@/app/registros';
 
@@ -25,7 +24,6 @@ export default function ContaScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
       <ScrollView
         contentContainerStyle={styles.content}
         refreshControl={

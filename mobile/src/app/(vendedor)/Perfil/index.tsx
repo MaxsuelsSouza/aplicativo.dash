@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+
 import { useRouter } from 'expo-router';
 
 const USERNAME = 'Usuário';
@@ -10,7 +10,6 @@ export default function PerfilVendedorScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
           <Text style={styles.username}>{USERNAME}</Text>

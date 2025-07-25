@@ -27,3 +27,10 @@ EXPO_PUBLIC_API_URL="https://meu-servidor" npx expo start
 
 Veja o exemplo em [`mobile/src/.env.example`](mobile/src/.env.example).
 
+## Ignorando o Safe Area
+
+Se alguma tela não deve respeitar o espaçamento aplicado automaticamente pelo
+`SafeAreaContainer`, adicione o prefixo do caminho da rota em
+[`mobile/src/constants/safeArea.ts`](mobile/src/constants/safeArea.ts) no array
+`SAFE_AREA_DISABLED_ROUTES`.
+
