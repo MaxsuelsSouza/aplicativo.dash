@@ -1,4 +1,5 @@
 import { API_URL } from '@/constants/api';
+import { api } from '@/api';
 
 export interface Loja {
   id: string;
@@ -17,11 +18,7 @@ function resolveImageUrl(imagem: string): string {
 }
 
 export async function fetchLojas(): Promise<Loja[]> {
-  const response = await fetch(`${API_URL}/lojas`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch lojas');
-  }
-  const data = await response.json();
+  const data = await api.get<any[]>('/lojas');
   return data.map((loja: any) => ({
     id: String(loja.identificador ?? loja.id),
     nome: loja.nomeFantasia ?? loja.nome,
