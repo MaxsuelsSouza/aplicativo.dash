@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import SafeScreen from '@/components/SafeScreen';
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/Feather';
 import { StatusBar } from 'expo-status-bar';
@@ -118,7 +119,7 @@ export default function HomeScreen() {
       <Text style={styles.infiniteScrollTitle}>Talvez você nem precisasse</Text>
     </View>
   ); return (
-    <View style={styles.containerTela}>
+    <SafeScreen style={styles.containerTela}>
       <StatusBar style="dark" />
       <View style={styles.statusBarBackground} />
       <View style={styles.headerContainer}>
@@ -153,6 +154,6 @@ export default function HomeScreen() {
         ListHeaderComponent={header}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeScreen>
   );
 }

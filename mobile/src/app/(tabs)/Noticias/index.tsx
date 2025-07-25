@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import SafeScreen from '@/components/SafeScreen';
 import { StatusBar } from 'expo-status-bar';
 import { fetchRegistros } from '@/app/registros';
 
@@ -12,7 +13,7 @@ export default function NoticiasScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeScreen style={styles.container}>
       <StatusBar />
       <ScrollView
         contentContainerStyle={styles.content}
@@ -22,7 +23,7 @@ export default function NoticiasScreen() {
       >
         <Text style={styles.text}>em criação</Text>
       </ScrollView>
-    </View>
+    </SafeScreen>
   );
 }
 
