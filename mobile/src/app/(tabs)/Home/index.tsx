@@ -40,7 +40,7 @@ const promotions: CarouselItem[] = Array.from({ length: 5 }).map((_, i) => ({
 const fallbackNearbyPromotions: CarouselItem[] = Array.from({ length: 6 }).map(
   (_, i) => ({
     id: `np${i}`,
-    title: `Oferta ${i + 1}`,
+    title: `Nome fantasia ${i + 1}`,
     image: `https://picsum.photos/seed/nearby${i}/300/300`,
   }),
 );
@@ -98,10 +98,10 @@ export default function HomeScreen() {
     imagemLoja()
       .then(lojas => {
         setNearbyPromotions(
-          lojas.map((loja, i) => ({
+          lojas.map(loja => ({
             id: String(loja.id),
             title: loja.nomeFantasia,
-            image: loja.imagem ?? `https://picsum.photos/seed/nearby${i}/300/300`,
+            image: loja.imagem,
           }))
         );
       })
