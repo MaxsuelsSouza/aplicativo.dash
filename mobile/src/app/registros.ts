@@ -1,4 +1,4 @@
-import { api } from '@/utils/Api';
+import { api } from '@/Api/api';
 
 export interface Nota {
   id: number;
