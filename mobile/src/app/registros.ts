@@ -1,86 +1,53 @@
-import { api } from '@/Api/api';
+import { API_URL } from "@/constants/api";
+import { lojaImagem } from "@/interfaces/loja";
+import { Produto } from "@/interfaces/product";
 
-export interface Nota {
-  id: number;
-  descricao_do_gasto: string;
-  isSaida: boolean;
-  valor: number;
+export async function ProdutosDetalhado(): Promise<Produto[]> {
+  const response = await fetch(`${API_URL}/products`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch registros");
+  }
+  const data = await response.json();
+  return data.map((p: any) => ({
+    ...p,
+        id: String(p.id),
+        lojaId: String(p.lojaId),
+        nome: p.nome,
+        SKU: p.SKU,
+        marca: p.marca,
+        modelo: p.modelo,
+        codigoBarras: p.codigoBarras,
+        preco: p.preco,
+        quantidadeEstoque: Number(p.quantidadeEstoque),
+        peso: p.peso,
+        dimensoes: p.dimensoes,
+        cor: p.cor,
+        tamanho: p.tamanho,
+        material: p.material,
+        imagens: Array.isArray(p.imagens) ? p.imagens : [],
+        ativo: Boolean(p.ativo),
+        avaliacaoMedia: Number(p.avaliacaoMedia),
+        numeroCompras: Number(p.numeroCompras),
+        ultimaAtualizacao: p.ultimaAtualizacao,
+        loja: p.loja
+          ? {
+              id: String(p.loja.id ?? ""),
+              nomeFantasia: p.loja.nomeFantasia ?? "",
+            }
+          : { id: "", nomeFantasia: "" },
+      }));
 }
 
-export interface Registro {
-  id: number;
-  id_pai: number | null;
-  dia_atualizacao: string;
-  entrada_total: number;
-  saida_total: number;
-  notas: Nota[];
-}
-
-export async function fetchRegistros(): Promise<Registro[]> {
-  const data = await api.get<any[]>('/controle/registros');
-  return data.map((r: any) => ({
-    ...r,
-    id: Number(r.id),
-    id_pai: r.id_pai !== null && r.id_pai !== undefined ? Number(r.id_pai) : null,
-    notas: Array.isArray(r.notas)
-      ? r.notas.map((n: any) => ({
-          ...n,
-          isSaida: Boolean(n.isSaida),
-          valor: Boolean(n.isSaida)
-            ? Number(r.saida_total)
-            : Number(r.entrada_total),
-        }))
-      : [],
+export async function imagemLoja(): Promise<lojaImagem[]> {
+  const response = await fetch(`${API_URL}/lojas`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch registros");
+  }
+  const data = await response.json();
+  return data.map((l: any) => ({
+    ...l,
+    id: String(l.id),
+    nomeFantasia: String(l.nomeFantasia),
+    imagem: String(l.imagem),
   }));
-}
-
-export interface NovoRegistroParams {
-  date: Date;
-  amount: number;
-  description: string;
-  isEntry: boolean;
-}
-
-export async function createRegistro({
-  date,
-  amount,
-  description,
-  isEntry,
-}: NovoRegistroParams) {
-  const normalizedDate = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
-  );
-  const body = {
-    data: normalizedDate.toISOString(),
-    entrada: isEntry ? amount : 0,
-    saida: isEntry ? 0 : amount,
-    descricao_do_gasto: description,
-    is_saida: !isEntry,
-  };
-  return api.post('/controle', body);
-}
-
-export async function updateRegistro(
-  id: number,
-  amount: number,
-  isEntry: boolean
-) {
-  const body: any = {};
-  if (isEntry) body.entrada = amount;
-  else body.saida = amount;
-  return api.put(`/controle/${id}`, body);
-}
-
-export async function marcarRecorrente(id: number, meses?: number) {
-  const body: any = {};
-  if (typeof meses === 'number') body.meses = meses;
-  return api.post(`/controle/${id}/recorrente`, body);
-}
-
-export async function deleteRecorrente(id: number) {
-  await api.delete(`/controle/${id}/recorrente`);
-}
-
-export async function deleteRegistro(id: number) {
-  await api.delete(`/controle/${id}`);
 }
