@@ -36,11 +36,6 @@ const promotions: CarouselItem[] = Array.from({ length: 5 }).map((_, i) => ({
   image: `https://picsum.photos/seed/promo${i}/300/200`,
 }));
 
-const nearbyPromotions: CarouselItem[] = Array.from({ length: 6 }).map((_, i) => ({
-  id: `np${i}`,
-  title: `Oferta ${i + 1}`,
-  image: `https://picsum.photos/seed/nearby${i}/300/300`,
-}));
 
 function generateProducts(count: number): Product[] {
   return Array.from({ length: count }).map((_, i) => {
@@ -56,7 +51,11 @@ function generateProducts(count: number): Product[] {
   });
 }
 
-export default function HomeScreen() {
+export interface HomeScreenProps {
+  nearbyPromotions: CarouselItem[];
+}
+
+export default function HomeScreen({ nearbyPromotions }: HomeScreenProps) {
   const [location, setLocation] = useState('Obtendo localização...');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
