@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { api } from "@/Api/api";
 
 export interface Nota {
   id: number;
@@ -17,11 +17,12 @@ export interface Registro {
 }
 
 export async function fetchRegistros(): Promise<Registro[]> {
-  const data = await api.get<any[]>('/controle/registros');
+  const data = await api.get<any[]>("/controle/registros");
   return data.map((r: any) => ({
     ...r,
     id: Number(r.id),
-    id_pai: r.id_pai !== null && r.id_pai !== undefined ? Number(r.id_pai) : null,
+    id_pai:
+      r.id_pai !== null && r.id_pai !== undefined ? Number(r.id_pai) : null,
     notas: Array.isArray(r.notas)
       ? r.notas.map((n: any) => ({
           ...n,
@@ -48,7 +49,7 @@ export async function createRegistro({
   isEntry,
 }: NovoRegistroParams) {
   const normalizedDate = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
   );
   const body = {
     data: normalizedDate.toISOString(),
@@ -57,7 +58,7 @@ export async function createRegistro({
     descricao_do_gasto: description,
     is_saida: !isEntry,
   };
-  return api.post('/controle', body);
+  return api.post("/controle", body);
 }
 
 export async function updateRegistro(
@@ -73,7 +74,7 @@ export async function updateRegistro(
 
 export async function marcarRecorrente(id: number, meses?: number) {
   const body: any = {};
-  if (typeof meses === 'number') body.meses = meses;
+  if (typeof meses === "number") body.meses = meses;
   return api.post(`/controle/${id}/recorrente`, body);
 }
 
