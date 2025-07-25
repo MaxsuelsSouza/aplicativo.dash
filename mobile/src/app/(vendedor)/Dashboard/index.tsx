@@ -1,27 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  RefreshControl,
-  Pressable,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useRouter } from 'expo-router';
 import { fetchRegistros } from '@/app/registros';
 
-export default function ContaScreen() {
+export default function DashboardScreen() {
   const [refreshing, setRefreshing] = useState(false);
-  const router = useRouter();
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchRegistros().finally(() => setRefreshing(false));
   }, []);
-
-  const acessarModoVendedor = () => {
-    router.push('/(vendedor)/Dashboard');
-  };
 
   return (
     <View style={styles.container}>
@@ -32,10 +19,7 @@ export default function ContaScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#fff" />
         }
       >
-        <Text style={styles.username}>Usuário</Text>
-        <Pressable onPress={acessarModoVendedor}>
-          <Text style={styles.link}>Acessar modo vendedor</Text>
-        </Pressable>
+        <Text style={styles.text}>em criação</Text>
       </ScrollView>
     </View>
   );
@@ -47,20 +31,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1F28',
   },
   content: {
-    flexGrow: 1,
-    padding: 16,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  username: {
+  text: {
     color: '#fff',
-    fontSize: 42,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 1,
-  },
-  link: {
-    color: '#FFD700',
-    fontSize: 16,
+    fontSize: 18,
   },
 });
