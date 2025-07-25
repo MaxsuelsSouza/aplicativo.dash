@@ -8,7 +8,7 @@ const API_URL =
  */
 async function checkBackendData() {
   try {
-    const response = await fetch(`${API_URL}/products`);
+    const response = await fetch(`${API_URL}/loja`);
     if (!response.ok) {
       return false;
     }
