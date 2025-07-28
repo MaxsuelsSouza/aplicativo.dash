@@ -11,12 +11,13 @@ interface SearchBarProps {
     onFocus?: () => void;
     autoFocus?: boolean;
     inputRef?: React.RefObject<TextInput>;
+    fullWidth?: boolean;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth }: SearchBarProps) {
     return (
-        <View style={styles.wrapper}>
-            <View style={styles.container}>
+        <View style={[styles.wrapper, fullWidth && styles.wrapperFull]}>
+            <View style={[styles.container, fullWidth && styles.containerFull]}>
                 <Icon name="magnify" size={22} color="#8B4513" style={styles.icon} />
                 <TextInput
                     ref={inputRef}
@@ -53,6 +54,9 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between',
     },
+    wrapperFull: {
+        marginBottom: 0,
+    },
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -63,6 +67,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#DDD8C0',
         width: 310,
+    },
+    containerFull: {
+        width: '100%',
     },
     icon: {
         marginRight: 8,

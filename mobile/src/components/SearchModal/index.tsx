@@ -62,6 +62,7 @@ export default function SearchModal({ visible, value, onChangeText, onRequestClo
           showPoints={false}
           autoFocus
           inputRef={inputRef}
+          fullWidth
         />
         <Animated.View style={[styles.card, { opacity: cardOpacity }]}>
           {/* Conteúdo do modal pode ser inserido aqui */}
