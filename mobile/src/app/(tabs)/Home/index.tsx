@@ -1,22 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
 import { SearchBar, PointsCounter, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid } from '../../../components';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
+import { produtosFotoValor } from '@/app/registros';
 
 export interface HomeProps {
     lojas: lojaImagem[];
 }
 const cardHeights = [120, 160, 220, 280, 320, 180];
-
-const feedData: MasonryGridItem[] = Array.from({ length: 24 }).map((_, i) => ({
-    id: String(i),
-    image: `https://picsum.photos/id/${i + 10}/400/600`,
-    label: `Item ${i + 1}`,
-    height: cardHeights[Math.floor(Math.random() * cardHeights.length)],
-}));
-
 export default function Home({ lojas }: HomeProps) {
     const [search, setSearch] = useState('');
 
@@ -32,37 +25,29 @@ export default function Home({ lojas }: HomeProps) {
         { id: '3', image: 'https://placehold.co/220x140', value: 'R$ 39,90' },
         { id: '4', image: 'https://placehold.co/220x140', value: 'R$ 49,90' },
     ];
-    // Exemplo de dados para o MasonryGrid
-    const [masonryData, setMasonryData] = useState(() => Array.from({ length: 12 }, (_, i) => ({
-        id: String(i + 1),
-        image: 'https://placehold.co/300x180',
-        label: `Produto ${i + 1}`,
-        height: 100 + Math.floor(Math.random() * 100),
-    })));
-    const [loadingMore, setLoadingMore] = useState(false);
+    const [masonryData, setMasonryData] = useState<MasonryGridItem[]>([]);
 
-    const handleLoadMore = () => {
-        if (loadingMore) return;
-        setLoadingMore(true);
-        setTimeout(() => {
-            setMasonryData(prev => [
-                ...prev,
-                ...Array.from({ length: 6 }, (_, i) => ({
-                    id: String(prev.length + i + 1),
-                    image: 'https://placehold.co/300x180',
-                    label: `Produto ${prev.length + i + 1}`,
-                    height: 100 + Math.floor(Math.random() * 100),
-                }))
-            ]);
-            setLoadingMore(false);
-        }, 1200);
-    };
+    useEffect(() => {
+        (async () => {
+            try {
+                const produtos = await produtosFotoValor();
+                const mapped = produtos.map((p) => ({
+                    id: p.id,
+                    image: p.imagem,
+                    label: `R$ ${p.preco}`,
+                    height: cardHeights[Math.floor(Math.random() * cardHeights.length)],
+                }));
+                setMasonryData(mapped);
+            } catch (err) {
+                console.error('Erro ao carregar produtos', err);
+            }
+        })();
+    }, []);
 
     return (
         <ScrollView
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
-            onMomentumScrollEnd={handleLoadMore}
         >
             <View style={styles.spacer24} />
             <View style={styles.locationStatusWrapper}>
@@ -95,16 +80,11 @@ export default function Home({ lojas }: HomeProps) {
                     Talvez você nem precisasse
                 </Text>
                 <MasonryGrid
-                    data={feedData}
+                    data={masonryData}
                     numColumns={2}
                     gap={12}
                     style={styles.masonryGrid}
                 />
-                {loadingMore && (
-                    <View style={styles.loadingMoreWrapper}>
-                        <Text style={styles.loadingMoreText}>Carregando mais...</Text>
-                    </View>
-                )}
             </View>
         </ScrollView>
     );
