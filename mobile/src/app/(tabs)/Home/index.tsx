@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
-import { SearchBar, PointsCounter, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
+import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
 import { produtosFotoValor } from '@/app/registros';
+import { inscreverExibicaoCabecalhoHome } from '@/utils/homeHeaderEvents';
 
 export interface HomeProps {
     lojas: lojaImagem[];
@@ -15,7 +16,7 @@ export default function Home({ lojas }: HomeProps) {
 
     // Filtro simples, pode ser melhorado conforme necessidade
     const lojasFiltradas = lojas.filter(loja =>
-        loja.nomeFantasia.toLowerCase().includes(search.toLowerCase())
+        loja.nomeFantasia.toLowerCase()
     );
 
     // Exemplo de dados para o carrossel retangular
@@ -28,8 +29,10 @@ export default function Home({ lojas }: HomeProps) {
     const [masonryData, setMasonryData] = useState<MasonryGridItem[]>([]);
     const [page, setPage] = useState(1);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+    const scrollRef = useRef<ScrollView>(null);
 
-    const loadPage = async (pageNumber: number) => {
+    const loadPage = useCallback(async (pageNumber: number) => {
         try {
             setLoadingMore(true);
             const produtos = await produtosFotoValor(pageNumber);
@@ -46,11 +49,11 @@ export default function Home({ lojas }: HomeProps) {
         } finally {
             setLoadingMore(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         loadPage(1);
-    }, []);
+    }, [loadPage]);
 
     const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
         const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
@@ -60,12 +63,33 @@ export default function Home({ lojas }: HomeProps) {
         }
     };
 
+    const refreshHome = useCallback(async () => {
+        setRefreshing(true);
+        setMasonryData([]);
+        await loadPage(1);
+        setRefreshing(false);
+        scrollRef.current?.scrollTo({ y: 0, animated: true });
+    }, [loadPage]);
+
+    useEffect(() => {
+        const unsubscribe = inscreverExibicaoCabecalhoHome(refreshHome);
+        return () => {
+            if (typeof unsubscribe === 'function') {
+                unsubscribe();
+            }
+        };
+    }, [refreshHome]);
+
     return (
         <ScrollView
+            ref={scrollRef}
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
             onScroll={handleScroll}
             scrollEventThrottle={16}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={refreshHome} tintColor="#8B4513" />
+            }
         >
             <View style={styles.spacer24} />
             <View style={styles.locationStatusWrapper}>
@@ -73,11 +97,9 @@ export default function Home({ lojas }: HomeProps) {
             </View>
             <View style={styles.searchRow}>
                 <View style={styles.searchBarContainer}>
-                    <SearchBar value={search} onChangeText={setSearch} placeholder="Buscar lojas..." />
+                    <SearchBar value={search} onChangeText={setSearch} placeholder="Tem no Dash..." points={35} />
                 </View>
-                <View style={styles.pointsCounter}>
-                    <PointsCounter />
-                </View>
+
             </View>
             <View style={styles.titleRow}>
                 <Text style={styles.titleText}>
