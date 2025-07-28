@@ -1,6 +1,11 @@
 import React from 'react';
-import CarouselCircularHorizontalPage from '@/components/CarouselCircularHorizontal/page';
+import CarouselCircularHorizontal from '@/components/CarouselCircularHorizontal';
+import { lojaImagem } from '@/interfaces/loja';
 
-export default function HomeScreen() {
-  return <CarouselCircularHorizontalPage />;
+export interface HomeProps {
+  lojas: lojaImagem[];
+}
+
+export default function Home({ lojas }: HomeProps) {
+  return <CarouselCircularHorizontal lojas={lojas} />;
 }
