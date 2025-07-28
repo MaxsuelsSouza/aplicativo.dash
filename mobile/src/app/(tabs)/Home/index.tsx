@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
-import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
+import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading, SearchModal } from '../../../components';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
 import { produtosFotoValor } from '@/app/registros';
@@ -13,6 +13,7 @@ export interface HomeProps {
 const cardHeights = [120, 160, 220, 280, 320, 180];
 export default function Home({ lojas }: HomeProps) {
     const [search, setSearch] = useState('');
+    const [searchVisible, setSearchVisible] = useState(false);
 
     // Filtro simples, pode ser melhorado conforme necessidade
     const lojasFiltradas = lojas.filter(loja =>
@@ -81,6 +82,7 @@ export default function Home({ lojas }: HomeProps) {
     }, [refreshHome]);
 
     return (
+        <>
         <ScrollView
             ref={scrollRef}
             contentContainerStyle={styles.scrollContent}
@@ -97,7 +99,13 @@ export default function Home({ lojas }: HomeProps) {
             </View>
             <View style={styles.searchRow}>
                 <View style={styles.searchBarContainer}>
-                    <SearchBar value={search} onChangeText={setSearch} placeholder="Tem no Dash..." points={35} />
+                    <SearchBar
+                        value={search}
+                        onChangeText={setSearch}
+                        placeholder="Tem no Dash..."
+                        points={35}
+                        onFocus={() => setSearchVisible(true)}
+                    />
                 </View>
 
             </View>
@@ -130,5 +138,12 @@ export default function Home({ lojas }: HomeProps) {
                 )}
             </View>
         </ScrollView>
+        <SearchModal
+            visible={searchVisible}
+            value={search}
+            onChangeText={setSearch}
+            onRequestClose={() => setSearchVisible(false)}
+        />
+        </>
     );
 }

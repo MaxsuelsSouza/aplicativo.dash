@@ -7,9 +7,12 @@ interface SearchBarProps {
     onChangeText: (text: string) => void;
     placeholder?: string;
     points?: number;
+    showPoints?: boolean;
+    onFocus?: () => void;
+    autoFocus?: boolean;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, points = 0 }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus }: SearchBarProps) {
     return (
         <View style={styles.wrapper}>
             <View style={styles.container}>
@@ -23,15 +26,19 @@ export default function SearchBar({ value, onChangeText, placeholder, points = 0
                     autoCapitalize="none"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
+                    onFocus={onFocus}
+                    autoFocus={autoFocus}
                 />
             </View>
-            <View style={styles.pointsContainer}>
-                <View style={styles.row}>
-                    <Text style={styles.pointsIcon}>🎯</Text>
-                    <Text style={styles.pointsIconLabel}>Pts</Text>
+            {showPoints && (
+                <View style={styles.pointsContainer}>
+                    <View style={styles.row}>
+                        <Text style={styles.pointsIcon}>🎯</Text>
+                        <Text style={styles.pointsIconLabel}>Pts</Text>
+                    </View>
+                    <Text style={styles.points}>{points}</Text>
                 </View>
-                <Text style={styles.points}>{points}</Text>
-            </View>
+            )}
         </View>
     );
 }
