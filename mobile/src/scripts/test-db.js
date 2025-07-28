@@ -2,7 +2,7 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://dashnet-production.u
 
 async function testConnection() {
   try {
-    const response = await fetch(`${API_URL}/lojas`);
+    const response = await fetch(`${API_URL}/products/foto-valor`);
     if (!response.ok) {
       console.error(`Request failed with status ${response.status}`);
       return;

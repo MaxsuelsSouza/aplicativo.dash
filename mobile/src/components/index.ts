@@ -10,5 +10,6 @@ export { default as SafeAreaContainer } from "./SafeArea";
 export { default as SearchBar } from "./SearchBar";
 export { default as CarouselRectHorizontal } from "./CarouselRectHorizontal";
 export { default as MasonryGrid } from "./MasonryGrid";
+export { default as InfiniteScrollLoading } from "./InfiniteScrollLoading";
 // Para os componentes em 'ui', exporte individualmente se necessário
 export { default as TabBarBackground } from "./ui/TabBarBackground";

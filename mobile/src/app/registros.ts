@@ -1,6 +1,7 @@
 import { API_URL } from "@/constants/api";
 import { lojaImagem } from "@/interfaces/loja";
 import { Produto } from "@/interfaces/product";
+import { FotoValor } from "@/interfaces/fotoValor";
 
 export async function ProdutosDetalhado(): Promise<Produto[]> {
   const response = await fetch(`${API_URL}/products`);
@@ -56,5 +57,26 @@ export async function imagemLoja(): Promise<lojaImagem[]> {
     id: String(l.id ?? index),
     nomeFantasia: String(l.nomeFantasia ?? ''),
     imagem: String(l.imagem ?? ''),
+  }));
+}
+
+export async function produtosFotoValor(page = 1): Promise<FotoValor[]> {
+  const response = await fetch(`${API_URL}/products/foto-valor?page=${page}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch foto-valor');
+  }
+  const data = await response.json();
+
+  const produtos = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.dados)
+      ? data.dados
+      : [];
+
+  return produtos.map((p: any, index: number) => ({
+    id: p?.id != null ? String(p.id) : `${page}-${index}`,
+    nome: String(p.nome ?? ''),
+    preco: String(p.preco ?? ''),
+    imagem: String(p.imagem ?? ''),
   }));
 }
