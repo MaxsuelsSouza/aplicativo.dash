@@ -60,8 +60,8 @@ export async function imagemLoja(): Promise<lojaImagem[]> {
   }));
 }
 
-export async function produtosFotoValor(): Promise<FotoValor[]> {
-  const response = await fetch(`${API_URL}/products/foto-valor`);
+export async function produtosFotoValor(page = 1): Promise<FotoValor[]> {
+  const response = await fetch(`${API_URL}/products/foto-valor?page=${page}`);
   if (!response.ok) {
     throw new Error('Failed to fetch foto-valor');
   }

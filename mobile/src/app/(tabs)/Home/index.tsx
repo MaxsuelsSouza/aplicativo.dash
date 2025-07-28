@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
 import { SearchBar, PointsCounter, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid } from '../../../components';
 import { styles } from './styles';
@@ -26,28 +26,46 @@ export default function Home({ lojas }: HomeProps) {
         { id: '4', image: 'https://placehold.co/220x140', value: 'R$ 49,90' },
     ];
     const [masonryData, setMasonryData] = useState<MasonryGridItem[]>([]);
+    const [page, setPage] = useState(1);
+    const [loadingMore, setLoadingMore] = useState(false);
+
+    const loadPage = async (pageNumber: number) => {
+        try {
+            setLoadingMore(true);
+            const produtos = await produtosFotoValor(pageNumber);
+            const mapped = produtos.map((p) => ({
+                id: p.id,
+                image: p.imagem,
+                label: `R$ ${p.preco}`,
+                height: cardHeights[Math.floor(Math.random() * cardHeights.length)],
+            }));
+            setMasonryData(prev => pageNumber === 1 ? mapped : [...prev, ...mapped]);
+            setPage(pageNumber);
+        } catch (err) {
+            console.error('Erro ao carregar produtos', err);
+        } finally {
+            setLoadingMore(false);
+        }
+    };
 
     useEffect(() => {
-        (async () => {
-            try {
-                const produtos = await produtosFotoValor();
-                const mapped = produtos.map((p) => ({
-                    id: p.id,
-                    image: p.imagem,
-                    label: `R$ ${p.preco}`,
-                    height: cardHeights[Math.floor(Math.random() * cardHeights.length)],
-                }));
-                setMasonryData(mapped);
-            } catch (err) {
-                console.error('Erro ao carregar produtos', err);
-            }
-        })();
+        loadPage(1);
     }, []);
+
+    const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
+        const distanceFromBottom = contentSize.height - (contentOffset.y + layoutMeasurement.height);
+        if (distanceFromBottom < 50 && !loadingMore) {
+            loadPage(page + 1);
+        }
+    };
 
     return (
         <ScrollView
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
+            onScroll={handleScroll}
+            scrollEventThrottle={200}
         >
             <View style={styles.spacer24} />
             <View style={styles.locationStatusWrapper}>
@@ -85,6 +103,11 @@ export default function Home({ lojas }: HomeProps) {
                     gap={12}
                     style={styles.masonryGrid}
                 />
+                {loadingMore && (
+                    <View style={styles.loadingMoreWrapper}>
+                        <Text style={styles.loadingMoreText}>Carregando mais...</Text>
+                    </View>
+                )}
             </View>
         </ScrollView>
     );
