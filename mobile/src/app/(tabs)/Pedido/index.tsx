@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { fetchRegistros } from '@/app/registros';
+import { imagemLoja } from '@/app/registros';
 
 export default function FinancasScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchRegistros()
+    imagemLoja()
       .finally(() => setRefreshing(false));
   }, []);
 

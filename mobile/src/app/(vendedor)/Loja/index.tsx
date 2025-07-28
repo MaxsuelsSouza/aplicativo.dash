@@ -9,7 +9,6 @@ import {
 import { styles } from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
-import { fetchRegistros } from '@/app/registros';
 
 const lojas = [
   { id: '1', nome: 'Loja 1', endereco: 'Rua A, 123' },
@@ -22,7 +21,6 @@ export default function LojaScreen() {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchRegistros().finally(() => setRefreshing(false));
   }, []);
 
   const novaLoja = () => {

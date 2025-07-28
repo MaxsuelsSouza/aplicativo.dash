@@ -1,117 +1,94 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  containerTela: {
-    flex: 1,
-    backgroundColor: "#fff", // Branco
-    paddingTop: 130,
+  scrollContent: {
+    paddingBottom: 32,
   },
-  statusBarBackground: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 50,
-    backgroundColor: "#fff", // Branco
-    zIndex: 5,
+  spacer24: {
+    height: 24,
   },
-  headerContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    // Branco
-    zIndex: 10,
-    paddingTop: 35,
-  },
-  locationContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+  locationStatusWrapper: {
     paddingHorizontal: 8,
+    marginBottom: 8,
   },
-  locationText: {
-    color: "#8B4513", // Marrom escuro para contraste com bege
-    marginLeft: 8,
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  searchInput: {
-    flex: 1,
+  searchRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+    paddingHorizontal: 8,
+    minHeight: 48,
     height: 48,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    backgroundColor: "#FFFAF0", // Bege mais claro
-    color: "#8B4513", // Marrom escuro
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#DDD8C0", // Bege médio
-    marginRight: 12,
+    gap: 8,
   },
-  pointsContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 12,
-    minWidth: 60,
-  },
-  pointsLabel: {
-    color: "#8B4513", // Marrom escuro
-    fontSize: 10,
-    fontWeight: "500",
-  },
-  codeText: {
-    color: "#8B4513", // Marrom escuro
-    fontSize: 14,
-    fontWeight: "700",
-    marginTop: 2,
-  },
-  listContent: {
-    paddingHorizontal: 8,
-    paddingBottom: 100,
-    paddingTop: 8,
-  },
-  column: {
-    justifyContent: "space-between",
-  },
-  productCard: {
-    borderRadius: 12,
-    marginBottom: 12,
-    overflow: "hidden",
+  searchBarContainer: {
     flex: 1,
-    marginHorizontal: 4,
+    justifyContent: "center",
+    marginRight: 4,
   },
-  productImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
+  pointsCounter: {
+    marginLeft: 4,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    fontFamily: "System",
+    fontWeight: "900", // Espessura mais grossa
   },
-  productInfo: {
-    padding: 8,
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 16,
+    marginBottom: 8,
+    paddingHorizontal: 12,
   },
-  productName: {
-    color: "#fff",
-    fontSize: 14,
+  titleText: {
+    color: "#8B4513",
+    fontSize: 18,
+    fontWeight: "900", // Espessura mais grossa
+    fontFamily: "System",
   },
-  productPrice: {
-    color: "#a287ff",
-    marginTop: 4,
+  seeMoreText: {
+    color: "#8B4513",
+    fontSize: 15,
+    fontWeight: "900", // Espessura mais grossa
+    opacity: 0.7,
+    fontFamily: "System",
   },
-  infiniteScrollTitle: {
-    color: "#8B4513", // Marrom escuro
-    fontSize: 16,
-    fontWeight: "bold",
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom: 16,
-    textAlign: "left",
+  sectionTitleWrapper: {
+    paddingHorizontal: 12,
+  },
+  titleTextWithMargin: {
+    color: "#8B4513",
+    fontSize: 18,
+    fontWeight: "900", // Espessura mais grossa
+    marginBottom: 8,
+    marginTop: 16,
+    fontFamily: "System",
+  },
+  masonrySection: {
+    marginTop: 24,
+    paddingHorizontal: 12,
+    flex: 1,
+  },
+  titleTextWithMarginBottom: {
+    color: "#8B4513",
+    fontSize: 18,
+    fontWeight: "900", // Espessura mais grossa
+    marginBottom: 12,
+    fontFamily: "System",
+  },
+  masonryGrid: {
+    paddingHorizontal: 11,
+    paddingTop: 16,
+  },
+  loadingMoreWrapper: {
+    alignItems: "center",
+    padding: 16,
+  },
+  loadingMoreText: {
+    color: "#8B4513",
+    fontFamily: "System",
+    fontWeight: "900", // Espessura mais grossa
   },
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text, View } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
 import {
   Container,
@@ -17,7 +18,10 @@ export interface CarouselCircularHorizontalProps {
 export default function CarouselCircularHorizontal({ lojas, title = 'Promoções perto de você' }: CarouselCircularHorizontalProps) {
   return (
     <Container>
-      <Title>{title}</Title>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Title>{title}</Title>
+        <Text style={{ color: '#8B4513', fontSize: 15, fontWeight: 'bold', opacity: 0.7, paddingRight: 9 }}>Ver mais</Text>
+      </View>
       <List horizontal showsHorizontalScrollIndicator={false}>
         {lojas.map((loja, idx) => (
           <ItemContainer key={loja.id || idx.toString()}>

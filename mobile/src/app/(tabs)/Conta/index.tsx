@@ -8,14 +8,12 @@ import {
   Pressable,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { fetchRegistros } from '@/app/registros';
 
 export default function ContaScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchRegistros().finally(() => setRefreshing(false));
   }, []);
 
   const acessarModoVendedor = () => {
