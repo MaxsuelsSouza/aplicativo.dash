@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HomeScreen from './index';
 import { lojaImagem } from '@/interfaces/loja';
-import { API_URL } from '@/constants/api';
+import { imagemLoja } from '@/app/registros';
 
 const DEFAULT_IMAGE = 'https://placehold.co/64x64';
 
@@ -9,13 +9,14 @@ export default function HomePage() {
   const [lojas, setLojas] = useState<lojaImagem[]>([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/lojas`)
-      .then((res) => res.json())
+    imagemLoja()
       .then((data) => {
-        const mapped = data.map((l: any) => ({
-          id: String(l.id),
-          nomeFantasia: String(l.nomeFantasia ?? ''),
-          imagem: l.imagem ? String(l.imagem) : DEFAULT_IMAGE,
+        const mapped = data.map((l) => ({
+          ...l,
+          imagem:
+            l.imagem && l.imagem !== 'null' && l.imagem !== ''
+              ? l.imagem
+              : DEFAULT_IMAGE,
         }));
         setLojas(mapped);
       })
