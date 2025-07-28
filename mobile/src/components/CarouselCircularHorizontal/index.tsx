@@ -15,7 +15,7 @@ export interface CarouselCircularHorizontalProps {
   title?: string;
 }
 
-export default function CarouselCircularHorizontal({ lojas, title = 'Promoções perto de você' }: CarouselCircularHorizontalProps) {
+export default function CarouselCircularHorizontal({ lojas, title = 'Lojas perto de você' }: CarouselCircularHorizontalProps) {
   return (
     <Container>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

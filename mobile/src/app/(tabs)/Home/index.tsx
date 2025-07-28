@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
-import { SearchBar, PointsCounter, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
+import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
 import { produtosFotoValor } from '@/app/registros';
@@ -16,7 +16,7 @@ export default function Home({ lojas }: HomeProps) {
 
     // Filtro simples, pode ser melhorado conforme necessidade
     const lojasFiltradas = lojas.filter(loja =>
-        loja.nomeFantasia.toLowerCase().includes(search.toLowerCase())
+        loja.nomeFantasia.toLowerCase()
     );
 
     // Exemplo de dados para o carrossel retangular
@@ -73,7 +73,11 @@ export default function Home({ lojas }: HomeProps) {
 
     useEffect(() => {
         const unsubscribe = inscreverExibicaoCabecalhoHome(refreshHome);
-        return unsubscribe;
+        return () => {
+            if (typeof unsubscribe === 'function') {
+                unsubscribe();
+            }
+        };
     }, [refreshHome]);
 
     return (
@@ -93,11 +97,9 @@ export default function Home({ lojas }: HomeProps) {
             </View>
             <View style={styles.searchRow}>
                 <View style={styles.searchBarContainer}>
-                    <SearchBar value={search} onChangeText={setSearch} placeholder="Buscar lojas..." />
+                    <SearchBar value={search} onChangeText={setSearch} placeholder="Tem no Dash..." points={35} />
                 </View>
-                <View style={styles.pointsCounter}>
-                    <PointsCounter />
-                </View>
+
             </View>
             <View style={styles.titleRow}>
                 <Text style={styles.titleText}>
