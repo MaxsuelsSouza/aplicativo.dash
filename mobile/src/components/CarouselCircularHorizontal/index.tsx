@@ -19,8 +19,8 @@ export default function CarouselCircularHorizontal({ lojas, title = 'Promoções
     <Container>
       <Title>{title}</Title>
       <List horizontal showsHorizontalScrollIndicator={false}>
-        {lojas.map(loja => (
-          <ItemContainer key={loja.id}>
+        {lojas.map((loja, idx) => (
+          <ItemContainer key={loja.id || idx.toString()}>
             <ItemImage source={{ uri: loja.imagem }} />
             <ItemName numberOfLines={1}>{loja.nomeFantasia}</ItemName>
           </ItemContainer>

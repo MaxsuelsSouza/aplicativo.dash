@@ -51,10 +51,10 @@ export async function imagemLoja(): Promise<lojaImagem[]> {
     ? data.data
     : [];
 
-  return lojas.map((l: any) => ({
+  return lojas.map((l: any, index: number) => ({
     ...l,
-    id: String(l.id),
-    nomeFantasia: String(l.nomeFantasia),
-    imagem: String(l.imagem),
+    id: String(l.id ?? index),
+    nomeFantasia: String(l.nomeFantasia ?? ''),
+    imagem: String(l.imagem ?? ''),
   }));
 }
