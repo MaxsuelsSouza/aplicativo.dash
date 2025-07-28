@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
-import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading, SearchModal } from '../../../components';
+import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
+import useSearchModal from '@/hooks/useSearchModal';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
 import { produtosFotoValor } from '@/app/registros';
@@ -12,8 +13,7 @@ export interface HomeProps {
 }
 const cardHeights = [120, 160, 220, 280, 320, 180];
 export default function Home({ lojas }: HomeProps) {
-    const [search, setSearch] = useState('');
-    const [searchVisible, setSearchVisible] = useState(false);
+    const { search, setSearch, visible: searchVisible, openSearch, closeSearch, SearchModal } = useSearchModal();
 
     // Filtro simples, pode ser melhorado conforme necessidade
     const lojasFiltradas = lojas.filter(loja =>
@@ -105,7 +105,7 @@ export default function Home({ lojas }: HomeProps) {
                             onChangeText={setSearch}
                             placeholder="Tem no Dash..."
                             points={35}
-                            onFocus={() => setSearchVisible(true)}
+                            onFocus={openSearch}
                         />
                     )}
                 </View>
@@ -140,12 +140,7 @@ export default function Home({ lojas }: HomeProps) {
                 )}
             </View>
         </ScrollView>
-        <SearchModal
-            visible={searchVisible}
-            value={search}
-            onChangeText={setSearch}
-            onRequestClose={() => setSearchVisible(false)}
-        />
+        <SearchModal />
         </>
     );
 }
