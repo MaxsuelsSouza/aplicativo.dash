@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
-import { SearchBar, PointsCounter, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid } from '../../../components';
+import { SearchBar, PointsCounter, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
 import { produtosFotoValor } from '@/app/registros';
@@ -34,7 +34,7 @@ export default function Home({ lojas }: HomeProps) {
             setLoadingMore(true);
             const produtos = await produtosFotoValor(pageNumber);
             const mapped = produtos.map((p) => ({
-                id: p.id,
+                id: `${pageNumber}-${p.id}`,
                 image: p.imagem,
                 label: `R$ ${p.preco}`,
                 height: cardHeights[Math.floor(Math.random() * cardHeights.length)],
@@ -65,7 +65,7 @@ export default function Home({ lojas }: HomeProps) {
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
             onScroll={handleScroll}
-            scrollEventThrottle={200}
+            scrollEventThrottle={16}
         >
             <View style={styles.spacer24} />
             <View style={styles.locationStatusWrapper}>
@@ -104,9 +104,7 @@ export default function Home({ lojas }: HomeProps) {
                     style={styles.masonryGrid}
                 />
                 {loadingMore && (
-                    <View style={styles.loadingMoreWrapper}>
-                        <Text style={styles.loadingMoreText}>Carregando mais...</Text>
-                    </View>
+                    <InfiniteScrollLoading />
                 )}
             </View>
         </ScrollView>
