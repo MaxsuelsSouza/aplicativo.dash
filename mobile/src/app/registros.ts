@@ -74,7 +74,7 @@ export async function produtosFotoValor(page = 1): Promise<FotoValor[]> {
       : [];
 
   return produtos.map((p: any, index: number) => ({
-    id: String(p.id ?? index),
+    id: p?.id != null ? String(p.id) : `${page}-${index}`,
     nome: String(p.nome ?? ''),
     preco: String(p.preco ?? ''),
     imagem: String(p.imagem ?? ''),
