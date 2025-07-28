@@ -8,8 +8,13 @@ async function testConnection() {
       return;
     }
     const data = await response.json();
-    console.log('Stores received:', Array.isArray(data) ? data.length : data);
-    console.log(data);
+    const lojas = Array.isArray(data)
+      ? data
+      : Array.isArray(data?.data)
+      ? data.data
+      : [];
+    console.log('Stores received:', lojas.length);
+    console.log(lojas);
   } catch (err) {
     console.error('Error connecting to API:', err);
   }

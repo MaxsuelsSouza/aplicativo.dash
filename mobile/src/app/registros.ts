@@ -44,7 +44,14 @@ export async function imagemLoja(): Promise<lojaImagem[]> {
     throw new Error("Failed to fetch registros");
   }
   const data = await response.json();
-  return data.map((l: any) => ({
+
+  const lojas = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.data)
+    ? data.data
+    : [];
+
+  return lojas.map((l: any) => ({
     ...l,
     id: String(l.id),
     nomeFantasia: String(l.nomeFantasia),
