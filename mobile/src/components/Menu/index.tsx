@@ -11,7 +11,7 @@ import {
 import { emitirExibicaoCabecalhoHome } from '@/utils/homeHeaderEvents';
 
 const opcoesMenu = [
-  { name: 'Início', icon: 'home', path: '/Home' },
+  { name: 'Início', icon: 'home', path: '/Home/page' },
   { name: 'Pedido', icon: 'receipt', path: '/Pedido' },
   { name: 'Perfil', icon: 'account-circle', path: '/Conta' },
 ];
@@ -22,7 +22,7 @@ export default function Menu() {
 
   const aoPressionar = (item: (typeof opcoesMenu)[number]) => {
     if (pathname === item.path) {
-      if (item.path === '/Home') {
+      if (item.path === '/Home/page') {
         emitirExibicaoCabecalhoHome();
       }
       return;

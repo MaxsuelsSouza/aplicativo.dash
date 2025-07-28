@@ -16,7 +16,7 @@ export default function TabsLayout() {
         tabBarStyle: { display: 'none' },
       }}>
       <Tabs.Screen
-        name="index"
+        name="page"
         options={{
           title: 'Alarme',
           tabBarIcon: ({ color }) => (
