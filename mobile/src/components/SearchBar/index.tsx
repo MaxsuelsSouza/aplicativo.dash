@@ -10,14 +10,16 @@ interface SearchBarProps {
     showPoints?: boolean;
     onFocus?: () => void;
     autoFocus?: boolean;
+    inputRef?: React.RefObject<TextInput>;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef }: SearchBarProps) {
     return (
         <View style={styles.wrapper}>
             <View style={styles.container}>
                 <Icon name="magnify" size={22} color="#8B4513" style={styles.icon} />
                 <TextInput
+                    ref={inputRef}
                     style={styles.input}
                     value={value}
                     onChangeText={onChangeText}

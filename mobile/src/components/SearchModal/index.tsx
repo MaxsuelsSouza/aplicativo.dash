@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Modal, Animated, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
+import { Modal, Animated, StyleSheet, View, TouchableWithoutFeedback, TextInput } from 'react-native';
 import SearchBar from '../SearchBar';
 
 interface SearchModalProps {
@@ -11,13 +11,29 @@ interface SearchModalProps {
 
 export default function SearchModal({ visible, value, onChangeText, onRequestClose }: SearchModalProps) {
   const anim = useRef(new Animated.Value(0)).current;
+  const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (visible) {
-      Animated.timing(anim, { toValue: 1, duration: 300, useNativeDriver: false }).start();
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
     } else {
-      Animated.timing(anim, { toValue: 0, duration: 200, useNativeDriver: false }).start();
+      Animated.timing(anim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: false,
+      }).start();
     }
+
+    const t = setTimeout(() => {
+      if (visible) {
+        inputRef.current?.focus();
+      }
+    }, 100);
+    return () => clearTimeout(t);
   }, [visible, anim]);
 
   const containerHeight = anim.interpolate({
@@ -28,7 +44,13 @@ export default function SearchModal({ visible, value, onChangeText, onRequestClo
   const cardOpacity = anim;
 
   return (
-    <Modal visible={visible} animationType="fade" transparent onRequestClose={onRequestClose}>
+    <Modal
+      visible={visible}
+      animationType="fade"
+      transparent
+      onShow={() => inputRef.current?.focus()}
+      onRequestClose={onRequestClose}
+    >
       <TouchableWithoutFeedback onPress={onRequestClose}>
         <View style={styles.overlay} />
       </TouchableWithoutFeedback>
@@ -39,6 +61,7 @@ export default function SearchModal({ visible, value, onChangeText, onRequestClo
           placeholder="Tem no Dash..."
           showPoints={false}
           autoFocus
+          inputRef={inputRef}
         />
         <Animated.View style={[styles.card, { opacity: cardOpacity }]}>
           {/* Conteúdo do modal pode ser inserido aqui */}
