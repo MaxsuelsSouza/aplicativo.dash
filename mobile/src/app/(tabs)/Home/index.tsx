@@ -99,13 +99,15 @@ export default function Home({ lojas }: HomeProps) {
             </View>
             <View style={styles.searchRow}>
                 <View style={styles.searchBarContainer}>
-                    <SearchBar
-                        value={search}
-                        onChangeText={setSearch}
-                        placeholder="Tem no Dash..."
-                        points={35}
-                        onFocus={() => setSearchVisible(true)}
-                    />
+                    {!searchVisible && (
+                        <SearchBar
+                            value={search}
+                            onChangeText={setSearch}
+                            placeholder="Tem no Dash..."
+                            points={35}
+                            onFocus={() => setSearchVisible(true)}
+                        />
+                    )}
                 </View>
 
             </View>
