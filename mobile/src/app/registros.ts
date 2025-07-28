@@ -39,7 +39,7 @@ export async function ProdutosDetalhado(): Promise<Produto[]> {
 }
 
 export async function imagemLoja(): Promise<lojaImagem[]> {
-  const response = await fetch(`${API_URL}/lojas`);
+  const response = await fetch(`${API_URL}/loja`);
   if (!response.ok) {
     throw new Error("Failed to fetch registros");
   }
