@@ -3,4 +3,4 @@
  * `SafeAreaContainer`. Insira aqui o prefixo do caminho de telas que não devem
  * receber o espaçamento no topo.
  */
-export const SAFE_AREA_DISABLED_ROUTES: string[] = ["/Home"];
+export const SAFE_AREA_DISABLED_ROUTES: string[] = ["/Home/page"];

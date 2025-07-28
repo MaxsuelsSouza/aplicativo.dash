@@ -15,7 +15,7 @@ export default function PerfilVendedorScreen() {
           <Text style={styles.username}>{USERNAME}</Text>
           <Text style={styles.tag}>Vendedor</Text>
         </View>
-        <Pressable onPress={() => router.replace('/Home')}>
+        <Pressable onPress={() => router.replace('/Home/page')}>
           <Text style={styles.link}>Sair do modo vendedor</Text>
         </Pressable>
       </ScrollView>
