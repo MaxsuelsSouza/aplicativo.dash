@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TextInput, StyleSheet } from 'react-native';
+import { Text, View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface SearchBarProps {
@@ -12,11 +12,14 @@ interface SearchBarProps {
     autoFocus?: boolean;
     inputRef?: React.RefObject<TextInput>;
     fullWidth?: boolean;
+    onPress?: () => void;
+    editable?: boolean;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth, onPress, editable = true }: SearchBarProps) {
+    const Wrapper: React.ComponentType<any> = onPress ? TouchableOpacity : View;
     return (
-        <View style={[styles.wrapper, fullWidth && styles.wrapperFull]}>
+        <Wrapper onPress={onPress} activeOpacity={0.7} style={[styles.wrapper, fullWidth && styles.wrapperFull]}>
             <View style={[styles.container, fullWidth && styles.containerFull]}>
                 <Icon name="magnify" size={22} color="#8B4513" style={styles.icon} />
                 <TextInput
@@ -31,6 +34,7 @@ export default function SearchBar({ value, onChangeText, placeholder, points = 0
                     clearButtonMode="while-editing"
                     onFocus={onFocus}
                     autoFocus={autoFocus}
+                    editable={editable}
                 />
             </View>
             {showPoints && (
@@ -42,7 +46,7 @@ export default function SearchBar({ value, onChangeText, placeholder, points = 0
                     <Text style={styles.points}>{points}</Text>
                 </View>
             )}
-        </View>
+        </Wrapper>
     );
 }
 

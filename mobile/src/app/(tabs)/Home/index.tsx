@@ -107,7 +107,8 @@ export default function Home({ lojas }: HomeProps) {
                             onChangeText={setSearch}
                             placeholder="Tem no Dash..."
                             points={35}
-                            onFocus={openSearch}
+                            onPress={openSearch}
+                            editable={false}
                         />
                     )}
                 </View>
