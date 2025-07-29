@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl } from 'react-native';
 import { lojaImagem } from '@/interfaces/loja';
 import { SearchBar, SearchModal, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
+import { fetchAutocomplete, sendFeedback, Suggestion } from '@/utils/search';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
 import { produtosFotoValor } from '@/app/registros';
@@ -16,6 +17,31 @@ export default function Home({ lojas }: HomeProps) {
     const [searchVisible, setSearchVisible] = useState(false);
     const openSearch = () => setSearchVisible(true);
     const closeSearch = () => setSearchVisible(false);
+    const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+
+    // fetch suggestions with debounce
+    useEffect(() => {
+        const handler = setTimeout(async () => {
+            if (searchVisible && search.trim()) {
+                const list = await fetchAutocomplete(search.trim());
+                setSuggestions(list);
+            } else {
+                setSuggestions([]);
+            }
+        }, 300);
+        return () => clearTimeout(handler);
+    }, [search, searchVisible]);
+
+    const selectSuggestion = async (s: Suggestion) => {
+        setSearch(s.text);
+        setSuggestions([]);
+        await sendFeedback({
+            term: search,
+            suggestion: s.text,
+            timestamp: new Date().toISOString(),
+        });
+        closeSearch();
+    };
 
     // Filtro simples, pode ser melhorado conforme necessidade
     const lojasFiltradas = lojas.filter(loja =>
@@ -148,6 +174,8 @@ export default function Home({ lojas }: HomeProps) {
             value={search}
             onChangeText={setSearch}
             onRequestClose={closeSearch}
+            suggestions={suggestions}
+            onSelect={selectSuggestion}
         />
         </>
     );

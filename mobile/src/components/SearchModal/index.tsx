@@ -1,44 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Modal, Animated, StyleSheet, View, TouchableWithoutFeedback, TextInput, FlatList, TouchableOpacity, Text } from 'react-native';
 import SearchBar from '../SearchBar';
-import { fetchAutocomplete, sendFeedback, Suggestion } from '@/utils/search';
+import { Suggestion } from '@/utils/search';
 
 interface SearchModalProps {
   visible: boolean;
   value: string;
   onChangeText: (text: string) => void;
   onRequestClose: () => void;
-  userId?: string;
+  suggestions: Suggestion[];
+  onSelect: (s: Suggestion) => void;
 }
 
-export default function SearchModal({ visible, value, onChangeText, onRequestClose, userId }: SearchModalProps) {
+export default function SearchModal({ visible, value, onChangeText, onRequestClose, suggestions, onSelect }: SearchModalProps) {
   const anim = useRef(new Animated.Value(0)).current;
   const inputRef = useRef<TextInput>(null);
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 
-  // Debounce search requests
-  useEffect(() => {
-    const handler = setTimeout(async () => {
-      if (visible && value.trim()) {
-        const list = await fetchAutocomplete(value.trim());
-        setSuggestions(list);
-      } else {
-        setSuggestions([]);
-      }
-    }, 300);
-    return () => clearTimeout(handler);
-  }, [value, visible]);
-
-  const selectSuggestion = async (s: Suggestion) => {
-    onChangeText(s.text);
-    setSuggestions([]);
-    await sendFeedback({
-      term: value,
-      suggestion: s.text,
-      timestamp: new Date().toISOString(),
-      userId,
-    });
-    onRequestClose();
+  const selectSuggestion = (s: Suggestion) => {
+    onSelect(s);
   };
 
   useEffect(() => {
