@@ -12,5 +12,6 @@ export { default as CarouselRectHorizontal } from "./CarouselRectHorizontal";
 export { default as MasonryGrid } from "./MasonryGrid";
 export { default as InfiniteScrollLoading } from "./InfiniteScrollLoading";
 export { default as SearchModal } from "./SearchModal";
+export { default as Screen } from "./Screen";
 // Para os componentes em 'ui', exporte individualmente se necessário
 export { default as TabBarBackground } from "./ui/TabBarBackground";

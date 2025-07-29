@@ -1,13 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  RefreshControl,
-  Pressable,
-} from 'react-native';
+import { Text, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Screen } from '@/components';
 
 export default function ContaScreen() {
   const [refreshing, setRefreshing] = useState(false);
@@ -21,27 +15,21 @@ export default function ContaScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.content}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#fff" />
-        }
-      >
-        <Text style={styles.username}>Usuário</Text>
-        <Pressable onPress={acessarModoVendedor}>
-          <Text style={styles.link}>Acessar modo vendedor</Text>
-        </Pressable>
-      </ScrollView>
-    </View>
+    <Screen
+      scrollable
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      contentContainerStyle={styles.content}
+    >
+      <Text style={styles.username}>Usuário</Text>
+      <Pressable onPress={acessarModoVendedor}>
+        <Text style={styles.link}>Acessar modo vendedor</Text>
+      </Pressable>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   content: {
     flexGrow: 1,
     padding: 16,
