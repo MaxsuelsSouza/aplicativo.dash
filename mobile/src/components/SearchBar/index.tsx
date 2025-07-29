@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TextInput, StyleSheet } from 'react-native';
+import { Text, View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface SearchBarProps {
@@ -7,14 +7,23 @@ interface SearchBarProps {
     onChangeText: (text: string) => void;
     placeholder?: string;
     points?: number;
+    showPoints?: boolean;
+    onFocus?: () => void;
+    autoFocus?: boolean;
+    inputRef?: React.RefObject<TextInput>;
+    fullWidth?: boolean;
+    onPress?: () => void;
+    editable?: boolean;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, points = 0 }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth, onPress, editable = true }: SearchBarProps) {
+    const Wrapper: React.ComponentType<any> = onPress ? TouchableOpacity : View;
     return (
-        <View style={styles.wrapper}>
-            <View style={styles.container}>
+        <Wrapper onPress={onPress} activeOpacity={0.7} style={[styles.wrapper, fullWidth && styles.wrapperFull]}>
+            <View style={[styles.container, fullWidth && styles.containerFull]}>
                 <Icon name="magnify" size={22} color="#8B4513" style={styles.icon} />
                 <TextInput
+                    ref={inputRef}
                     style={styles.input}
                     value={value}
                     onChangeText={onChangeText}
@@ -23,16 +32,21 @@ export default function SearchBar({ value, onChangeText, placeholder, points = 0
                     autoCapitalize="none"
                     autoCorrect={false}
                     clearButtonMode="while-editing"
+                    onFocus={onFocus}
+                    autoFocus={autoFocus}
+                    editable={editable}
                 />
             </View>
-            <View style={styles.pointsContainer}>
-                <View style={styles.row}>
-                    <Text style={styles.pointsIcon}>🎯</Text>
-                    <Text style={styles.pointsIconLabel}>Pts</Text>
+            {showPoints && (
+                <View style={styles.pointsContainer}>
+                    <View style={styles.row}>
+                        <Text style={styles.pointsIcon}>🎯</Text>
+                        <Text style={styles.pointsIconLabel}>Pts</Text>
+                    </View>
+                    <Text style={styles.points}>{points}</Text>
                 </View>
-                <Text style={styles.points}>{points}</Text>
-            </View>
-        </View>
+            )}
+        </Wrapper>
     );
 }
 
@@ -44,6 +58,9 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between',
     },
+    wrapperFull: {
+        marginBottom: 0,
+    },
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -54,6 +71,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#DDD8C0',
         width: 310,
+    },
+    containerFull: {
+        width: '100%',
     },
     icon: {
         marginRight: 8,
