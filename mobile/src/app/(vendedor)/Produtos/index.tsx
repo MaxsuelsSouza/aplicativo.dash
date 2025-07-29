@@ -26,7 +26,7 @@ export default function ProdutosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1E1F28',
+    backgroundColor: '#fff',
   },
   content: {
     flex: 1,

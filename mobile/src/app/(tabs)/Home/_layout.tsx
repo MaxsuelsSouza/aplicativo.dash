@@ -1,11 +1,11 @@
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Tabs } from "expo-router";
-import { Text, useColorScheme } from "react-native";
+import { Text } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export default function TabsLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = 'light';
 
   return (
     <Tabs
