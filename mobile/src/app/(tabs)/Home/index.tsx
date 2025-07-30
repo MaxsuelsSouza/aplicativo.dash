@@ -23,7 +23,8 @@ export default function Home({ lojas }: HomeProps) {
     useEffect(() => {
         const handler = setTimeout(async () => {
             if (searchVisible && search.trim()) {
-                const list = await fetchAutocomplete(search.trim());
+                // connect SearchBar with /products/busca using typed term
+                const list = await fetchAutocomplete(search);
                 setSuggestions(list);
             } else {
                 setSuggestions([]);
