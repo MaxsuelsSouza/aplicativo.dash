@@ -13,7 +13,11 @@ export interface Produto {
   cor: string;
   tamanho: string;
   material: string;
-  imagens: string[];
+  /**
+   * Relacionamento opcional com a tabela de imagens do produto.
+   * Pode ser nulo quando o produto ainda não possui foto cadastrada.
+   */
+  produtoImagemId?: string | null;
   ativo: boolean;
   avaliacaoMedia: number;
   numeroCompras: number;
