@@ -30,10 +30,12 @@ export async function fetchAutocomplete(term: string): Promise<Suggestion[]> {
         ? data.dados
         : Array.isArray(data?.data)
           ? data.data
-          : [];
+          : Array.isArray(data?.resultados)
+            ? data.resultados
+            : [];
     return list.slice(0, 10).map((item: any) => ({
       text: String(item.text ?? item.nome ?? item),
-      source: item.source ? String(item.source) : undefined,
+      source: item.source ? String(item.source) : 'banco tradicional',
     }));
   } catch (err) {
     console.error('Error fetching autocomplete', err);
