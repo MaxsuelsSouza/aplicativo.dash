@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { Text, View, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl } from 'react-native';
+import { useRouter } from 'expo-router';
 import { lojaImagem } from '@/interfaces/loja';
 import { SearchBar, SearchModal, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
 import { styles } from './styles';
@@ -16,6 +17,11 @@ export default function Home({ lojas }: HomeProps) {
     const [searchVisible, setSearchVisible] = useState(false);
     const openSearch = () => setSearchVisible(true);
     const closeSearch = () => setSearchVisible(false);
+    const router = useRouter();
+    const handleSearchSubmit = () => {
+        closeSearch();
+        router.push({ pathname: '/Pesquisa', params: { q: search } });
+    };
 
     // Filtro simples, pode ser melhorado conforme necessidade
     const lojasFiltradas = lojas.filter(loja =>
@@ -148,6 +154,7 @@ export default function Home({ lojas }: HomeProps) {
             value={search}
             onChangeText={setSearch}
             onRequestClose={closeSearch}
+            onSubmitEditing={handleSearchSubmit}
         />
         </>
     );

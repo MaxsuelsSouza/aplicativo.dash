@@ -7,9 +7,10 @@ interface SearchModalProps {
   value: string;
   onChangeText: (text: string) => void;
   onRequestClose: () => void;
+  onSubmitEditing?: () => void;
 }
 
-export default function SearchModal({ visible, value, onChangeText, onRequestClose }: SearchModalProps) {
+export default function SearchModal({ visible, value, onChangeText, onRequestClose, onSubmitEditing }: SearchModalProps) {
   const anim = useRef(new Animated.Value(0)).current;
   const inputRef = useRef<TextInput>(null);
 
@@ -63,6 +64,7 @@ export default function SearchModal({ visible, value, onChangeText, onRequestClo
           autoFocus
           inputRef={inputRef}
           fullWidth
+          onSubmitEditing={onSubmitEditing}
         />
         <Animated.View style={[styles.card, { opacity: cardOpacity }]}>
           {/* Conteúdo do modal pode ser inserido aqui */}

@@ -14,9 +14,10 @@ interface SearchBarProps {
     fullWidth?: boolean;
     onPress?: () => void;
     editable?: boolean;
+    onSubmitEditing?: () => void;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth, onPress, editable = true }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth, onPress, editable = true, onSubmitEditing }: SearchBarProps) {
     const Wrapper: React.ComponentType<any> = onPress ? TouchableOpacity : View;
     return (
         <Wrapper onPress={onPress} activeOpacity={0.7} style={[styles.wrapper, fullWidth && styles.wrapperFull]}>
@@ -35,6 +36,7 @@ export default function SearchBar({ value, onChangeText, placeholder, points = 0
                     onFocus={onFocus}
                     autoFocus={autoFocus}
                     editable={editable}
+                    onSubmitEditing={onSubmitEditing}
                 />
             </View>
             {showPoints && (
