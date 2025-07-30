@@ -25,7 +25,7 @@ export async function ProdutosDetalhado(): Promise<Produto[]> {
         cor: p.cor,
         tamanho: p.tamanho,
         material: p.material,
-        imagens: Array.isArray(p.imagens) ? p.imagens : [],
+        produtoImagemId: p.produtoImagemId ? String(p.produtoImagemId) : null,
         ativo: Boolean(p.ativo),
         avaliacaoMedia: Number(p.avaliacaoMedia),
         numeroCompras: Number(p.numeroCompras),
@@ -79,4 +79,33 @@ export async function produtosFotoValor(page = 1): Promise<FotoValor[]> {
     preco: String(p.preco ?? ''),
     imagem: String(p.imagem ?? ''),
   }));
+}
+
+/**
+ * Envia uma imagem para um produto existente e recebe o produto atualizado
+ * com o id da imagem registrada.
+ */
+export async function adicionarFotoProduto(
+  produtoId: string,
+  foto: FormData
+): Promise<Produto> {
+  const response = await fetch(`${API_URL}/products/${produtoId}/imagem`, {
+    method: 'POST',
+    body: foto,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to upload product image');
+  }
+
+  const data = await response.json();
+
+  // Assume o backend devolve o produto atualizado já com produtoImagemId
+  return {
+    ...data,
+    id: String(data.id),
+    produtoImagemId: data.produtoImagemId
+      ? String(data.produtoImagemId)
+      : null,
+  } as Produto;
 }
