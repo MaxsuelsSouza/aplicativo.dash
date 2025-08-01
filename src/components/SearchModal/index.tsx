@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Modal, Animated, StyleSheet, View, TouchableWithoutFeedback, TextInput } from 'react-native';
+import { Modal, Animated, StyleSheet, View, TouchableWithoutFeedback, TextInput, InteractionManager } from 'react-native';
 import SearchBar from '../SearchBar';
 
 interface SearchModalProps {
@@ -7,9 +7,10 @@ interface SearchModalProps {
   value: string;
   onChangeText: (text: string) => void;
   onRequestClose: () => void;
+  onSubmitEditing?: () => void;
 }
 
-export default function SearchModal({ visible, value, onChangeText, onRequestClose }: SearchModalProps) {
+export default function SearchModal({ visible, value, onChangeText, onRequestClose, onSubmitEditing }: SearchModalProps) {
   const anim = useRef(new Animated.Value(0)).current;
   const inputRef = useRef<TextInput>(null);
 
@@ -20,6 +21,11 @@ export default function SearchModal({ visible, value, onChangeText, onRequestClo
         duration: 300,
         useNativeDriver: false,
       }).start();
+      
+      // Usa InteractionManager para garantir que todas as animações terminem
+      InteractionManager.runAfterInteractions(() => {
+        inputRef.current?.focus();
+      });
     } else {
       Animated.timing(anim, {
         toValue: 0,
@@ -27,13 +33,6 @@ export default function SearchModal({ visible, value, onChangeText, onRequestClo
         useNativeDriver: false,
       }).start();
     }
-
-    const t = setTimeout(() => {
-      if (visible) {
-        inputRef.current?.focus();
-      }
-    }, 100);
-    return () => clearTimeout(t);
   }, [visible, anim]);
 
   const containerHeight = anim.interpolate({
@@ -48,26 +47,34 @@ export default function SearchModal({ visible, value, onChangeText, onRequestClo
       visible={visible}
       animationType="fade"
       transparent
-      onShow={() => inputRef.current?.focus()}
+      onShow={() => {
+        // Tenta focar imediatamente quando o modal é mostrado
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 100);
+      }}
       onRequestClose={onRequestClose}
     >
       <TouchableWithoutFeedback onPress={onRequestClose}>
         <View style={styles.overlay} />
       </TouchableWithoutFeedback>
-      <Animated.View style={[styles.container, { height: containerHeight }]}>
-        <SearchBar
-          value={value}
-          onChangeText={onChangeText}
-          placeholder="Tem no Dash..."
-          showPoints={false}
-          autoFocus
-          inputRef={inputRef}
-          fullWidth
-        />
-        <Animated.View style={[styles.card, { opacity: cardOpacity }]}>
-          {/* Conteúdo do modal pode ser inserido aqui */}
+      <TouchableWithoutFeedback onPress={() => {}}>
+        <Animated.View style={[styles.container, { height: containerHeight }]}>
+          <SearchBar
+            value={value}
+            onChangeText={onChangeText}
+            placeholder="Tem no Dash..."
+            showPoints={false}
+            autoFocus
+            inputRef={inputRef}
+            fullWidth
+            onSubmitEditing={onSubmitEditing}
+          />
+          <Animated.View style={[styles.card, { opacity: cardOpacity }]}>
+            {/* Conteúdo do modal pode ser inserido aqui */}
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }

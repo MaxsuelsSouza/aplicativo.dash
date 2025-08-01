@@ -13,5 +13,6 @@ export { default as MasonryGrid } from "./MasonryGrid";
 export { default as InfiniteScrollLoading } from "./InfiniteScrollLoading";
 export { default as SearchModal } from "./SearchModal";
 export { default as Screen } from "./Screen";
+export { default as ProductListVertical } from "./ProductListVertical";
 // Para os componentes em 'ui', exporte individualmente se necessário
 export { default as TabBarBackground } from "./ui/TabBarBackground";

@@ -6,14 +6,15 @@ export const Container = styled.View`
 
 export const Title = styled.Text`
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 900;
   color: #8b4513;
   margin-bottom: 8px;
-  padding-left: 16px;
+  padding-left: 12px;
+  font-family: System;
 `;
 
 export const List = styled.ScrollView`
-  padding-left: 16px;
+  padding-left: 12px;
 `;
 
 export const ItemContainer = styled.View`

@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
     minHeight: 48,
     height: 48,
     gap: 8,
+    zIndex: 3, // Maior que o SearchModal para ficar na frente
+    position: 'relative',
   },
   searchBarContainer: {
     flex: 1,
@@ -34,52 +36,13 @@ export const styles = StyleSheet.create({
     fontFamily: "System",
     fontWeight: "900", // Espessura mais grossa
   },
-  titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 16,
-    marginBottom: 8,
-    paddingHorizontal: 12,
-  },
-  titleText: {
-    color: "#8B4513",
-    fontSize: 18,
-    fontWeight: "900", // Espessura mais grossa
-    fontFamily: "System",
-  },
-  seeMoreText: {
-    color: "#8B4513",
-    fontSize: 15,
-    fontWeight: "900", // Espessura mais grossa
-    opacity: 0.7,
-    fontFamily: "System",
-  },
-  sectionTitleWrapper: {
-    paddingHorizontal: 12,
-  },
-  titleTextWithMargin: {
-    color: "#8B4513",
-    fontSize: 18,
-    fontWeight: "900", // Espessura mais grossa
-    marginBottom: 8,
-    marginTop: 16,
-    fontFamily: "System",
-  },
   masonrySection: {
-    marginTop: 24,
+    marginTop: 16, // Reduzido de 24 para 16
     paddingHorizontal: 12,
     flex: 1,
   },
-  titleTextWithMarginBottom: {
-    color: "#8B4513",
-    fontSize: 18,
-    fontWeight: "900", // Espessura mais grossa
-    marginBottom: 12,
-    fontFamily: "System",
-  },
   masonryGrid: {
-    paddingHorizontal: 11,
+    paddingHorizontal: 0, // Removendo padding extra
     paddingTop: 16,
   },
   loadingMoreWrapper: {
@@ -90,5 +53,35 @@ export const styles = StyleSheet.create({
     color: "#8B4513",
     fontFamily: "System",
     fontWeight: "900", // Espessura mais grossa
+  },
+  searchOverlay: {
+    position: 'absolute',
+    top: 130, // Mais próximo ao SearchBar para melhor efeito de "esconder atrás"
+    left: 8,
+    right: 8,
+    backgroundColor: '#FFFAF0',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#DDD8C0',
+    elevation: 2, // Menor elevação para ficar "atrás"
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    zIndex: 1, // Menor que o SearchBar para ficar atrás
+    transformOrigin: 'top center', // Ponto de ancoragem no topo para a animação
+  },
+  searchContent: {
+    minHeight: 200,
+    padding: 16,
+  },
+  searchBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+    zIndex: 1,
   },
 });

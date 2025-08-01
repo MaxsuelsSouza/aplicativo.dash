@@ -22,10 +22,16 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <SafeAreaContainer>
           <ThemeProvider value={DefaultTheme}>
-            <Stack initialRouteName="index">
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="(vendedor)" options={{ headerShown: false }} />
+            <Stack 
+              initialRouteName="index"
+              screenOptions={{ 
+                headerShown: false 
+              }}
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="(vendedor)" />
+              <Stack.Screen name="Produto" />
               <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="dark" />
