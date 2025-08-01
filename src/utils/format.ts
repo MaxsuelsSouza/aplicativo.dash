@@ -25,3 +25,40 @@ export function formatarBRLCompleto(valor: number): string {
     maximumFractionDigits: 2,
   });
 }
+
+export function formatarData(data: Date | string): string {
+  const date = typeof data === 'string' ? new Date(data) : data;
+  return date.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
+
+export function formatarDataHora(data: Date | string): string {
+  const date = typeof data === 'string' ? new Date(data) : data;
+  return date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+export function formatarDataRelativa(data: Date | string): string {
+  const date = typeof data === 'string' ? new Date(data) : data;
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - date.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) {
+    return 'Hoje';
+  } else if (diffDays === 1) {
+    return 'Ontem';
+  } else if (diffDays <= 7) {
+    return `${diffDays} dias atrás`;
+  } else {
+    return formatarData(date);
+  }
+}

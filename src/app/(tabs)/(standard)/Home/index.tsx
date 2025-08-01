@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { View, FlatList, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, Animated, TextInput, TouchableWithoutFeedback, Keyboard, ListRenderItem } from 'react-native';
 import { useRouter } from 'expo-router';
 import { lojaImagem } from '@/interfaces/loja';
-import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '../../../components';
+import { SearchBar, LocationStatus, CarouselCircularHorizontal, CarouselRectHorizontal, MasonryGrid, InfiniteScrollLoading } from '@/components';
 import { styles } from './styles';
 import { MasonryGridItem } from '@/components/MasonryGrid';
 import { produtosFotoValor } from '@/app/registros';
 import { inscreverExibicaoCabecalhoHome } from '@/utils/homeHeaderEvents';
+import { formatarBRLCompleto } from '@/utils/format';
 
 export interface HomeProps {
     lojas: lojaImagem[];
@@ -65,10 +66,10 @@ export default function Home({ lojas }: HomeProps) {
 
     // Exemplo de dados para o carrossel retangular
     const produtosFake = [
-        { id: '1', image: 'https://placehold.co/220x140', value: 'R$ 19,90' },
-        { id: '2', image: 'https://placehold.co/220x140', value: 'R$ 29,90' },
-        { id: '3', image: 'https://placehold.co/220x140', value: 'R$ 39,90' },
-        { id: '4', image: 'https://placehold.co/220x140', value: 'R$ 49,90' },
+        { id: '1', image: 'https://placehold.co/220x140', value: formatarBRLCompleto(19.90) },
+        { id: '2', image: 'https://placehold.co/220x140', value: formatarBRLCompleto(29.90) },
+        { id: '3', image: 'https://placehold.co/220x140', value: formatarBRLCompleto(39.90) },
+        { id: '4', image: 'https://placehold.co/220x140', value: formatarBRLCompleto(49.90) },
     ];
     const [masonryData, setMasonryData] = useState<MasonryGridItem[]>([]);
     const [page, setPage] = useState(1);
@@ -181,7 +182,7 @@ export default function Home({ lojas }: HomeProps) {
             const mapped = produtos.map((p) => ({
                 id: `${pageNumber}-${p.id}`,
                 image: p.imagem,
-                label: `R$ ${p.preco}`,
+                label: formatarBRLCompleto(parseFloat(p.preco)),
                 height: cardHeights[Math.floor(Math.random() * cardHeights.length)],
             }));
             setMasonryData(prev => pageNumber === 1 ? mapped : [...prev, ...mapped]);

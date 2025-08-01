@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { formatarData } from '@/utils/format';
 
 export interface DateInputProps {
   value: Date;
@@ -23,7 +24,7 @@ export default function DateInput({ value, onChange, style }: DateInputProps) {
   return (
     <View>
       <TouchableOpacity onPress={() => setShow(true)} style={style}>
-        <Text style={{ color: '#fff' }}>{value.toLocaleDateString('pt-BR')}</Text>
+        <Text style={{ color: '#fff' }}>{formatarData(value)}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker

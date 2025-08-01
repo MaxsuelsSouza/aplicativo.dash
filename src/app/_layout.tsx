@@ -7,6 +7,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import SafeAreaContainer from '@/components/SafeArea';
+import { NotificationProvider } from '@/hooks/useNotification';
+import { HeartAnimationProvider } from '@/hooks/useHeartAnimation';
+import { CartAnimationProvider } from '@/hooks/useCartAnimation';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -18,26 +21,32 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <SafeAreaContainer>
-          <ThemeProvider value={DefaultTheme}>
-            <Stack 
-              initialRouteName="index"
-              screenOptions={{ 
-                headerShown: false 
-              }}
-            >
-              <Stack.Screen name="index" />
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="(vendedor)" />
-              <Stack.Screen name="Produto" />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="dark" />
-          </ThemeProvider>
-        </SafeAreaContainer>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ThemeProvider value={DefaultTheme}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <SafeAreaContainer>
+            <NotificationProvider>
+              <HeartAnimationProvider>
+                <CartAnimationProvider>
+                  <Stack 
+                    initialRouteName="index"
+                    screenOptions={{ 
+                      headerShown: false 
+                    }}
+                  >
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="(tabs)" />
+                    <Stack.Screen name="(vendedor)" />
+                    <Stack.Screen name="Produto" />
+                    <Stack.Screen name="+not-found" />
+                  </Stack>
+                </CartAnimationProvider>
+              </HeartAnimationProvider>
+            </NotificationProvider>
+          </SafeAreaContainer>
+        </SafeAreaProvider>
+        <StatusBar style="dark" />
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 }

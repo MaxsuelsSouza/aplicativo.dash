@@ -14,5 +14,9 @@ export { default as InfiniteScrollLoading } from "./InfiniteScrollLoading";
 export { default as SearchModal } from "./SearchModal";
 export { default as Screen } from "./Screen";
 export { default as ProductListVertical } from "./ProductListVertical";
+export { default as ProductActions } from "./ProductActions";
+export { default as Notification } from "./Notification";
+export { default as HeartAnimation } from "./HeartAnimation";
+export { default as CartAnimation } from "./CartAnimation";
 // Para os componentes em 'ui', exporte individualmente se necessário
 export { default as TabBarBackground } from "./ui/TabBarBackground";

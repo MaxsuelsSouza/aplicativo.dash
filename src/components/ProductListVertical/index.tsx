@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { formatarBRLCompleto } from '@/utils/format';
 import {
   ListContainer,
   Card,
@@ -50,7 +51,7 @@ export default function ProductListVertical({ produtos, style }: ProductListVert
               <ProductImage source={{ uri: item.imagem }} />
               <Info>
                 <ProductName numberOfLines={1}>{item.nome}</ProductName>
-                <ProductPrice>{item.preco}</ProductPrice>
+                <ProductPrice>{formatarBRLCompleto(typeof item.preco === 'string' ? parseFloat(item.preco) : item.preco)}</ProductPrice>
                 <ProductDistance>{item.distanciaKm} km</ProductDistance>
               </Info>
             </Card>
