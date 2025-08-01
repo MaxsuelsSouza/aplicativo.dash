@@ -13,15 +13,18 @@ import {
 export interface CarouselCircularHorizontalProps {
   lojas: lojaImagem[];
   title?: string;
+  showTitle?: boolean;
 }
 
-export default function CarouselCircularHorizontal({ lojas, title = 'Lojas perto de você' }: CarouselCircularHorizontalProps) {
+export default function CarouselCircularHorizontal({ lojas, title = 'Lojas perto de você', showTitle = true }: CarouselCircularHorizontalProps) {
   return (
     <Container>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Title>{title}</Title>
-        <Text style={{ color: '#8B4513', fontSize: 15, fontWeight: 'bold', opacity: 0.7, paddingRight: 9 }}>Ver mais</Text>
-      </View>
+      {showTitle && (
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Title>{title}</Title>
+          <Text style={{ color: '#8B4513', fontSize: 15, fontWeight: '900', opacity: 0.7, paddingRight: 12, fontFamily: 'System' }}>Ver mais</Text>
+        </View>
+      )}
       <List horizontal showsHorizontalScrollIndicator={false}>
         {lojas.map((loja, idx) => (
           <ItemContainer key={loja.id || idx.toString()}>

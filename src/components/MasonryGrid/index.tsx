@@ -13,6 +13,8 @@ export interface MasonryGridProps {
     numColumns?: number;
     gap?: number;
     style?: any;
+    title?: string;
+    showTitle?: boolean;
 }
 
 export default function MasonryGrid({
@@ -20,10 +22,13 @@ export default function MasonryGrid({
     numColumns = 2,
     gap = 12,
     style,
+    title,
+    showTitle = true,
 }: MasonryGridProps) {
     const screenWidth = Dimensions.get('window').width;
+    const horizontalPadding = 24; // Padding horizontal total (12 de cada lado)
     const totalGap = gap * (numColumns - 1);
-    const cardWidth = (screenWidth - totalGap - 32) / numColumns;
+    const cardWidth = (screenWidth - totalGap - horizontalPadding) / numColumns;
 
     // Distribui itens nas colunas tipo masonry
     const columns: MasonryGridItem[][] = Array.from({ length: numColumns }, () => []);
@@ -36,14 +41,17 @@ export default function MasonryGrid({
     });
 
     return (
-        <View style={[styles.row, style]}>
+        <View style={style}>
+            {showTitle && title && (
+                <Text style={styles.titleText}>{title}</Text>
+            )}
+            <View style={styles.row}>
             {columns.map((col, colIdx) => (
                 <View
                     key={colIdx}
                     style={{
                         width: cardWidth,
-                        marginLeft: colIdx === 0 ? 0 : gap / 2,
-                        marginRight: colIdx === numColumns - 1 ? 0 : gap / 2,
+                        marginRight: colIdx === numColumns - 1 ? 0 : gap,
                     }}
                 >
                     {col.map((item) => (
@@ -56,6 +64,7 @@ export default function MasonryGrid({
                     ))}
                 </View>
             ))}
+            </View>
         </View>
     );
 }
@@ -92,5 +101,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 8,
         paddingVertical: 2,
+    },
+    titleText: {
+        color: '#8B4513',
+        fontSize: 18,
+        fontWeight: '900',
+        marginBottom: 12,
+        fontFamily: 'System',
+        paddingLeft: 0, // Mais próximo da borda esquerda
     },
 });

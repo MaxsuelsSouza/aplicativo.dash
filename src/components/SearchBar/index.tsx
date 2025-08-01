@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, StyleSheet, TouchableOpacity, Animated, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface SearchBarProps {
@@ -7,7 +7,7 @@ interface SearchBarProps {
     onChangeText: (text: string) => void;
     placeholder?: string;
     points?: number;
-    showPoints?: boolean;
+    showPoints?: boolean | Animated.AnimatedAddition<number>;
     onFocus?: () => void;
     autoFocus?: boolean;
     inputRef?: React.RefObject<TextInput>;
@@ -15,38 +15,70 @@ interface SearchBarProps {
     onPress?: () => void;
     editable?: boolean;
     onSubmitEditing?: () => void;
+    animationValue?: Animated.Value;
+    onClearText?: () => void;
+    showClearButton?: boolean;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth, onPress, editable = true, onSubmitEditing }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, placeholder, points = 0, showPoints = true, onFocus, autoFocus, inputRef, fullWidth, onPress, editable = true, onSubmitEditing, animationValue, onClearText, showClearButton = false }: SearchBarProps) {
     const Wrapper: React.ComponentType<any> = onPress ? TouchableOpacity : View;
+    
+    // Calcular largura máxima considerando margens menores para maior expansão
+    const screenWidth = Dimensions.get('window').width;
+    const maxWidth = screenWidth - 16; // Apenas 8px de margem de cada lado para maior largura
+    
+    const animatedWidth = animationValue ? animationValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [320, maxWidth],
+    }) : undefined;
+    
     return (
         <Wrapper onPress={onPress} activeOpacity={0.7} style={[styles.wrapper, fullWidth && styles.wrapperFull]}>
-            <View style={[styles.container, fullWidth && styles.containerFull]}>
+            <Animated.View style={[
+                styles.container, 
+                fullWidth && styles.containerFull,
+                animatedWidth && { width: animatedWidth }
+            ]}>
                 <Icon name="magnify" size={22} color="#8B4513" style={styles.icon} />
                 <TextInput
                     ref={inputRef}
-                    style={styles.input}
+                    style={[styles.input, showClearButton && value.length > 0 && { paddingRight: 40 }]}
                     value={value}
                     onChangeText={onChangeText}
                     placeholder={placeholder || 'Pesquisar...'}
                     placeholderTextColor="#8B4513"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    clearButtonMode="while-editing"
+                    clearButtonMode="never"
                     onFocus={onFocus}
                     autoFocus={autoFocus}
                     editable={editable}
                     onSubmitEditing={onSubmitEditing}
                 />
-            </View>
-            {showPoints && (
-                <View style={styles.pointsContainer}>
+                {showClearButton && value.length > 0 && onClearText && (
+                    <TouchableOpacity onPress={onClearText} style={styles.clearButton}>
+                        <Icon name="close" size={18} color="#8B4513" />
+                    </TouchableOpacity>
+                )}
+            </Animated.View>
+            {typeof showPoints === 'boolean' ? (
+                showPoints && (
+                    <View style={styles.pointsContainer}>
+                        <View style={styles.row}>
+                            <Text style={styles.pointsIcon}>🎯</Text>
+                            <Text style={styles.pointsIconLabel}>Pts</Text>
+                        </View>
+                        <Text style={styles.points}>{points}</Text>
+                    </View>
+                )
+            ) : (
+                <Animated.View style={[styles.pointsContainer, { opacity: showPoints }]}>
                     <View style={styles.row}>
                         <Text style={styles.pointsIcon}>🎯</Text>
                         <Text style={styles.pointsIconLabel}>Pts</Text>
                     </View>
                     <Text style={styles.points}>{points}</Text>
-                </View>
+                </Animated.View>
             )}
         </Wrapper>
     );
@@ -115,5 +147,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginTop: 2,
+    },
+    clearButton: {
+        position: 'absolute',
+        right: 12,
+        top: '50%',
+        transform: [{ translateY: -12 }],
+        width: 24,
+        height: 24,
+        borderRadius: 12,
+        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

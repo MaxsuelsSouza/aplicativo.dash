@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
 
 export interface CarouselRectHorizontalItem {
     id: string;
@@ -15,6 +15,8 @@ export interface CarouselRectHorizontalProps {
     cardHeightSmall?: number;
     cardHeightLarge?: number;
     style?: any;
+    title?: string;
+    showTitle?: boolean;
 }
 
 const DEFAULT_WIDTH_SMALL = 140;
@@ -30,27 +32,35 @@ export default function CarouselRectHorizontal({
     cardHeightSmall = DEFAULT_HEIGHT_SMALL,
     cardHeightLarge = DEFAULT_HEIGHT_LARGE,
     style,
+    title,
+    showTitle = true,
 }: CarouselRectHorizontalProps) {
     const cardWidth = size === 'large' ? cardWidthLarge : cardWidthSmall;
     const cardHeight = size === 'large' ? cardHeightLarge : cardHeightSmall;
 
     return (
-        <FlatList
-            data={data}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={item => item.id}
-            style={style}
-            contentContainerStyle={{ paddingHorizontal: 8 }}
-            renderItem={({ item }) => (
-                <View style={[styles.card, { width: cardWidth, height: cardHeight }]}>
-                    <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
-                    <View style={styles.valueContainer}>
-                        <Text style={styles.valueText}>{item.value}</Text>
-                    </View>
+        <View style={style}>
+            {showTitle && title && (
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>{title}</Text>
+                    <Text style={styles.seeMoreText}>Ver mais</Text>
                 </View>
             )}
-        />
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingHorizontal: 8 }}
+            >
+                {data.map((item) => (
+                    <View key={item.id} style={[styles.card, { width: cardWidth, height: cardHeight }]}>
+                        <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.valueText}>{item.value}</Text>
+                        </View>
+                    </View>
+                ))}
+            </ScrollView>
+        </View>
     );
 }
 
@@ -102,5 +112,26 @@ const styles = StyleSheet.create({
         color: '#8B4513',
         fontWeight: 'bold',
         fontSize: 13,
+    },
+    titleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 16,
+        marginBottom: 8,
+        paddingHorizontal: 12,
+    },
+    titleText: {
+        color: '#8B4513',
+        fontSize: 18,
+        fontWeight: '900',
+        fontFamily: 'System',
+    },
+    seeMoreText: {
+        color: '#8B4513',
+        fontSize: 15,
+        fontWeight: '900',
+        opacity: 0.7,
+        fontFamily: 'System',
     },
 });
